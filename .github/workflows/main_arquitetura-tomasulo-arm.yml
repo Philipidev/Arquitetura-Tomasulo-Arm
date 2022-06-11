@@ -21,10 +21,13 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: npm install, build
-        run: |
-          npm install
-          CI='' npm run build
+      - name: npm install
+        run: npm install
+
+      - name: npm build
+        run: npm run build
+        env:
+          CI: false
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
