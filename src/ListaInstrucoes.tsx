@@ -1,137 +1,65 @@
-import React, { useContext } from 'react';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Input } from 'antd';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from './App';
+import CiclosPorInstrucao from './CiclosPorInstrucao';
+import InputInstrucao from './InputInstrucao';
+import QuantidadeTipoRegistrador from './QuantidadeTipoRegistrador';
+
 
 
 const ListaInstrucoes: React.FC = () => {
+    const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
+
     const {
-        arrEstacaoReserva,
-        arrInstrucoes,
-        arrRegistrador
+        
     } = useContext(IntrucaoContext);
+
+    const GerarCampoInstrucoes = () => {
+        const arrFragmentInstrucao: JSX.Element[] = [];
+        for (let i = 0; i < quantidadeInstrucoes; i++)
+            arrFragmentInstrucao.push(<InputInstrucao key={`index-ionpt-instrucao-${i}`} index={i} />)
+        return arrFragmentInstrucao;
+    }
 
     return (
         <Wrapper>
-            <WrapperTabelas>
-                <label>
-                    Instruções
+            <div className='qtd-instrucoes-wrapper'>
+                <label >
+                    Quantidade de instruções:
                 </label>
-                <STabela>
-                    <thead>
-                        <tr>
-                            <th>Instrução</th>
-                            <th>Enviada</th>
-                            <th>Executada</th>
-                            <th>Escrita</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            (arrInstrucoes && arrInstrucoes.value && arrInstrucoes.value.length)
-                                ? arrInstrucoes.value.map(instrucao =>
-                                    <tr>
-                                        <td>{instrucao.nome}</td>
-                                        <td>{instrucao.enviada ? 'X' : ''}</td>
-                                        <td>{instrucao.escrita ? 'X' : ''}</td>
-                                        <td>{instrucao.executada ? 'X' : ''}</td>
-                                    </tr>
-                                )
-                                :
-                                <tr>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                        }
-                    </tbody>
-                </STabela>
-            </WrapperTabelas>
-            <WrapperTabelas>
-                <label>
-                    Estação de Reserva
+                <div className='qtd-instrucoes'>
+                    <Button
+                        onClick={() => { if (quantidadeInstrucoes === 1) return; setQuantidadeInstrucoes(quantidadeInstrucoes - 1); }}
+                    >
+                        <MinusOutlined />
+                    </Button>
+
+                    <Input
+                        type={'number'}
+                        value={quantidadeInstrucoes}
+                        onChange={(e) => { if (Number(e.target.value) <= 0) return; setQuantidadeInstrucoes(Number(e.target.value)) }}
+                    />
+                    <Button
+                        onClick={() => setQuantidadeInstrucoes(quantidadeInstrucoes + 1)}
+                    >
+                        <PlusOutlined />
+                    </Button>
+
+                </div>
+            </div>
+            <div>
+                <label >
+                    Lista de instruções:
                 </label>
-                <STabela>
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Ocupada</th>
-                            <th>Operação</th>
-                            <th>Vj</th>
-                            <th>Vk</th>
-                            <th>Qj</th>
-                            <th>Qk</th>
-                            <th>A</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            (arrEstacaoReserva && arrEstacaoReserva.value && arrEstacaoReserva.value.length)
-                                ? arrEstacaoReserva.value.map(estacaoReserva =>
-                                    <tr>
-                                        <td>{estacaoReserva.nome}</td>
-                                        <td>{estacaoReserva.ocupada ? 'X' : ''}</td>
-                                        <td>{estacaoReserva.operacao}</td>
-                                        <td>{estacaoReserva.Vj}</td>
-                                        <td>{estacaoReserva.Vk}</td>
-                                        <td>{estacaoReserva.Qj}</td>
-                                        <td>{estacaoReserva.Qk}</td>
-                                        <td>{estacaoReserva.A}</td>
-                                    </tr>
-                                )
-                                :
-                                <tr>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                    <td>--</td>
-                                </tr>
-                        }
-                    </tbody>
-                </STabela>
-            </WrapperTabelas>
-            <WrapperTabelas>
-                <label>
-                    Registradores
-                </label>
-                <STabela>
-                    {
-                        (arrRegistrador && arrRegistrador.value && arrRegistrador.value.length)
-                            ? arrRegistrador.value.map(registrador =>
-                                <>
-                                    <thead>
-                                        <tr>
-                                            <th>{registrador.nome}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{registrador.valor}</td>
-                                        </tr>
-                                    </tbody>
-                                </>
-                            )
-                            :
-                            <>
-                                <thead>
-                                    <tr>
-                                        <th>--</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>--</td>
-                                    </tr>
-                                </tbody>
-                            </>
-                    }
-                </STabela>
-            </WrapperTabelas>
-        </Wrapper>
+                {
+                    GerarCampoInstrucoes()
+                }
+            </div>
+            <CiclosPorInstrucao />
+            <QuantidadeTipoRegistrador />
+        </Wrapper >
     );
 }
 
@@ -142,25 +70,19 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-`;
 
-const WrapperTabelas = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin-top: 100px;
+    .qtd-instrucoes-wrapper{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 40px;
+        align-items: center;
+        .qtd-instrucoes{
+            display: flex;
+            flex-direction: row;
+        }
+    }
+    .input-instrucoes{
+        display: flex;
+        flex-direction: row;
+    }
 `;
-
-const STabela = styled.table`
-	border: 1px solid black;
-	th{
-		border: 1px solid gray;
-		padding: 10px;
-	}
-	td { 
-		border: 1px solid gray;
-		padding: 10px;
-	}
-`;
-

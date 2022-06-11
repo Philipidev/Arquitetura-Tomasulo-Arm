@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { useArray, UseArrayActions } from './hooks/useArray';
 import ListaInstrucoes from './ListaInstrucoes';
 import TabelasInstrucoes from './TabelasInstrucoes';
-import Tabelas from './TabelasInstrucoes';
+import { TipoInstrucao } from './Enums/TipoInstrucao';
+import { TipoRegistrador } from './Enums/TipoRegistrador';
 
-
-interface IInstrucoes {
-	nome: string;
+export interface IInstrucoes {
+	nome: keyof typeof TipoInstrucao;
 	enviada: boolean;
 	executada: boolean;
 	escrita: boolean;
@@ -16,26 +16,39 @@ interface IInstrucoes {
 	entrada3?: string;
 }
 
-interface IEstacaoReserva {
-	nome: string;
+export interface IEstacaoReserva {
+	// nome: string;
+	TipoRegistrador: keyof typeof TipoRegistrador;
 	ocupada: boolean;
-	operacao: string;//Ver se é melhor criar uma tipagem para isso
-	Vj: number;
-	Vk: number;
-	Qj: number;
-	Qk: number;
-	A: string;
+	operacao?: string;//Ver se é melhor criar uma tipagem para isso
+	Vj?: string;
+	Vk?: string;
+	Qj?: string;
+	Qk?: string;
+	A?: string;
 }
 
-interface IRegistrador {
+export interface IRegistrador {
 	nome: string;
 	valor: string;
+}
+
+export interface ICicloPorInstrucao {
+	TipoInstrucao: keyof typeof TipoInstrucao;
+	quantidade: number;
+}
+
+export interface ITipoRegistrador {
+	TipoRegistrador: keyof typeof TipoRegistrador;
+	quantidade: number;
 }
 
 export interface IIntrucaoContextProps {
 	arrInstrucoes: UseArrayActions<IInstrucoes>;
 	arrEstacaoReserva: UseArrayActions<IEstacaoReserva>;
 	arrRegistrador: UseArrayActions<IRegistrador>;
+	arrCicloPorInstrucao: UseArrayActions<ICicloPorInstrucao>;
+	arrTipoRegistrador: UseArrayActions<ITipoRegistrador>;
 }
 
 export const IntrucaoContext = React.createContext<IIntrucaoContextProps>({} as IIntrucaoContextProps);
@@ -44,56 +57,30 @@ function App() {
 	const arrInstrucoes = useArray<IInstrucoes>([]);
 	const arrEstacaoReserva = useArray<IEstacaoReserva>([]);
 	const arrRegistrador = useArray<IRegistrador>([]);
+	const arrCicloPorInstrucao = useArray<ICicloPorInstrucao>(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
+		return (
+			{
+				quantidade: 1,
+				TipoInstrucao: i
+			}
+		)
+	}));
+	const arrTipoRegistrador = useArray<ITipoRegistrador>(Object.keys(TipoRegistrador).map((i: any, ind: number) => {
+		return (
+			{
+				quantidade: 1,
+				TipoRegistrador: i
+			}
+		)
+	}));
 
 	const defaultValue: IIntrucaoContextProps = {
 		arrInstrucoes,
 		arrEstacaoReserva,
-		arrRegistrador
+		arrRegistrador,
+		arrCicloPorInstrucao,
+		arrTipoRegistrador,
 	}
-
-	const onMount = () => {
-		if (arrInstrucoes.length) return;
-		const arrInstrucoesAux: IInstrucoes[] = [
-			{
-				nome: 'Add',
-				enviada: true,
-				escrita: true,
-				executada: true,
-				entrada1: 'F0',
-				entrada2: '10',
-				entrada3: 'F1'
-			},
-			{
-				nome: 'Mult',
-				enviada: true,
-				escrita: true,
-				executada: false,
-				entrada1: 'F2',
-				entrada2: 'F0',
-				entrada3: '10'
-			},
-			{
-				nome: 'Sub',
-				enviada: true,
-				escrita: false,
-				executada: false,
-				entrada1: 'F1',
-				entrada2: 'F2',
-				entrada3: 'F0'
-			},
-			{
-				nome: 'Ld',
-				enviada: false,
-				escrita: false,
-				executada: false,
-				entrada1: 'F0',
-				entrada2: '20',
-			},
-		]
-
-		arrInstrucoes.setValue(arrInstrucoesAux);
-	}
-	useEffect(onMount, []);
 
 	return (
 		<WrapperSiderContent>
@@ -115,17 +102,15 @@ export default App;
 const WrapperSiderContent = styled.div`
 	display: flex;
 	flex-direction: row;
-	/* height: 100%;
-	flex: 1; */
+    height: 100%;
 
 	.container-direita{
 		width: 30%;
 		height: 100%;
-		background: #00fff278;
+		border-right: 1px solid grey;
 	}
 	.container-esquerda{
 		width: 70%;
 		height: 100%;
-		background: #01a54088;
 	}
 `;
