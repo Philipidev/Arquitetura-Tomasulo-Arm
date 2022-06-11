@@ -29,6 +29,7 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
 
         arrEstacaoReserva.setValue([...arrAuxEstacaoReserva]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(onArrTipoRegistradorChanges, [arrTipoRegistrador.value])
 
     console.log("arrEstacaoReserva", arrEstacaoReserva.value)
@@ -73,8 +74,11 @@ export default QuantidadeTipoRegistrador;
 const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-    margin-top: 12px;
+    margin-bottom: 15px;
     align-items: end;
+    -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
 
     .tipo-registrador{
         display: flex;

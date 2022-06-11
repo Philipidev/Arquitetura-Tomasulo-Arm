@@ -1,8 +1,7 @@
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IntrucaoContext } from './App';
 import CiclosPorInstrucao from './CiclosPorInstrucao';
 import InputInstrucao from './InputInstrucao';
 import QuantidadeTipoRegistrador from './QuantidadeTipoRegistrador';
@@ -12,9 +11,9 @@ import QuantidadeTipoRegistrador from './QuantidadeTipoRegistrador';
 const ListaInstrucoes: React.FC = () => {
     const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
 
-    const {
-        
-    } = useContext(IntrucaoContext);
+    // const {
+
+    // } = useContext(IntrucaoContext);
 
     const GerarCampoInstrucoes = () => {
         const arrFragmentInstrucao: JSX.Element[] = [];
@@ -49,7 +48,7 @@ const ListaInstrucoes: React.FC = () => {
 
                 </div>
             </div>
-            <div>
+            <div className='lista-de-instrucoes'>
                 <label >
                     Lista de instruções:
                 </label>
@@ -70,12 +69,16 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+    
 
     .qtd-instrucoes-wrapper{
         display: flex;
         flex-direction: column;
         margin-bottom: 40px;
         align-items: center;
+        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
         .qtd-instrucoes{
             display: flex;
             flex-direction: row;
@@ -84,5 +87,11 @@ const Wrapper = styled.div`
     .input-instrucoes{
         display: flex;
         flex-direction: row;
+    }
+    .lista-de-instrucoes{
+        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+        margin-bottom: 15px;
     }
 `;

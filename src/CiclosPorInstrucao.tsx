@@ -1,5 +1,5 @@
-import { Dropdown, Input, Select } from 'antd';
-import React, { useContext, useEffect, useState } from 'react';
+import { Input } from 'antd';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from './App';
 import { TipoInstrucao } from './Enums/TipoInstrucao';
@@ -9,9 +9,6 @@ interface IProps {
 
 const CiclosPorInstrucao: React.FC<IProps> = () => {
     const {
-        arrEstacaoReserva,
-        arrInstrucoes,
-        arrRegistrador,
         arrCicloPorInstrucao
     } = useContext(IntrucaoContext);
 
@@ -55,9 +52,12 @@ export default CiclosPorInstrucao;
 const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
-    margin-top: 12px;
+    margin-bottom: 15px;
     align-items: end;
 
+    -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     .ciclo-por-instrucao{
         display: flex;
         flex-direction: row;

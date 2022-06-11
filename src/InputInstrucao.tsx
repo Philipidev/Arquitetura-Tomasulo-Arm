@@ -50,6 +50,7 @@ const InputInstrucao: React.FC<IProps> = ({
             arrInstrucoes.removeIndex(index);
         }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(onMount, []);
 
     return (
@@ -96,7 +97,9 @@ const Wrapper = styled.div`
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-
+    -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     input{
         width: 100px;
     }
