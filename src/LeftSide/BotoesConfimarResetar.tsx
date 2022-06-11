@@ -16,6 +16,7 @@ const BotoesConfimarResetar: React.FC = () => {
         arrEstacaoReserva,
         setQuantidadeInstrucoes,
         confirmado, setConfirmado,
+        setCicloAtual
     } = useContext(IntrucaoContext);
 
     const onCliqueConfirmar = () => {
@@ -25,94 +26,86 @@ const BotoesConfimarResetar: React.FC = () => {
         }
         let ehValido = true;
         arrInstrucoes.value.forEach((i, ind) => {
-            console.log(i)
-            if (i.nome === TipoInstrucao.Add && (!i.entrada1 || !i.entrada2 || !i.entrada3)) {
-                ehValido = false;
-                alert(`'Instrução ${ind + 1}' ADD deve ter 3 entradas`);
+            if ((i.nome === TipoInstrucao.Add || i.nome === TipoInstrucao.Sub || i.nome === TipoInstrucao.Mul || i.nome === TipoInstrucao.Ldr || i.nome === TipoInstrucao.Ldr) && (!i.entrada1 || !i.entrada2 || !i.entrada3)) {
+            ehValido = false;
+            alert(`'Instrução ${ind + 1}' ${i.nome} deve ter 3 entradas (entrada1 e entrada2 e entrada3)`);
+        }
+        // if ((i.nome === TipoInstrucao.Ldr || i.nome === TipoInstrucao.Ldr) && (!i.entrada1 || !i.entrada2)) {
+        //     ehValido = false;
+        //     alert(`'Instrução ${ind + 1}' ${i.nome} deve ter 2 entradas (entrada1 e entrada2)`);
+        // }
+        //TODO mais validacoes
+    })
+    if (!ehValido)
+        return;
+
+    // arrInstrucoes.setValue([...arrInstrucoes.value.map(i => {
+    //     i.Ciclos = arrCicloPorInstrucao.findByStringId(i.nome, 'TipoInstrucao').quantidade;
+    //     return i;
+    // })]);
+
+    // arrEstacaoReserva.setValue([...arrEstacaoReserva.value.map(er => {
+    //     if(TipoRegistrador.DivF === er.TipoRegistrador){
+    //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
+    //     }
+    //     else  if(TipoRegistrador.Inteiro === er.TipoRegistrador){
+    //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
+    //     }
+    //     else if(TipoRegistrador.MulF === er.TipoRegistrador){
+    //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Mul, 'TipoInstrucao').quantidade;
+    //     }
+    //     return er;
+    // })])
+
+    setConfirmado(true);
+}
+
+const onCliqueResetar = () => {
+    setConfirmado(false);
+    setCicloAtual(0);
+    setQuantidadeInstrucoes(1);
+    arrTipoRegistrador.setValue(Object.keys(TipoRegistrador).map((i: any, ind: number) => {
+        return (
+            {
+                quantidade: 1,
+                TipoRegistrador: i
             }
-            if (i.nome === TipoInstrucao.Sub && (!i.entrada1 || !i.entrada2 || !i.entrada3)) {
-                ehValido = false;
-                alert(`'Instrução ${ind + 1}' SUB deve ter 3 entradas`);
+        )
+    }))
+    arrCicloPorInstrucao.setValue(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
+        return (
+            {
+                quantidade: 1,
+                TipoInstrucao: i
             }
-            if (i.nome === TipoInstrucao.Mul && (!i.entrada1 || !i.entrada2 || !i.entrada3)) {
-                ehValido = false;
-                alert(`'Instrução ${ind + 1}' MUL deve ter 3 entradas`);
-            }
-            if (i.nome === TipoInstrucao.Div && (!i.entrada1 || !i.entrada2 || !i.entrada3)) {
-                ehValido = false;
-                alert(`'Instrução ${ind + 1}' DIV deve ter 3 entradas`);
-            }
-            //TODO mais validacoes
-        })
-        if (!ehValido)
-            return;
+        )
+    }))
+    const instrucaoDefault = arrInstrucoes.value[0];
+    instrucaoDefault.nome = 'Add';
+    instrucaoDefault.entrada1 = '';
+    instrucaoDefault.entrada2 = '';
+    instrucaoDefault.entrada3 = undefined;
+    instrucaoDefault.enviada = false;
+    instrucaoDefault.executada = false;
+    instrucaoDefault.escrita = false;
+    arrInstrucoes.setValue([...[instrucaoDefault]]);
+}
 
-        // arrInstrucoes.setValue([...arrInstrucoes.value.map(i => {
-        //     i.Ciclos = arrCicloPorInstrucao.findByStringId(i.nome, 'TipoInstrucao').quantidade;
-        //     return i;
-        // })]);
-
-        // arrEstacaoReserva.setValue([...arrEstacaoReserva.value.map(er => {
-        //     if(TipoRegistrador.DivF === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
-        //     }
-        //     else  if(TipoRegistrador.Inteiro === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
-        //     }
-        //     else if(TipoRegistrador.MulF === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Mul, 'TipoInstrucao').quantidade;
-        //     }
-        //     return er;
-        // })])
-
-        setConfirmado(true);
-    }
-
-    const onCliqueResetar = () => {
-        setConfirmado(false);
-        setQuantidadeInstrucoes(1);
-        arrTipoRegistrador.setValue(Object.keys(TipoRegistrador).map((i: any, ind: number) => {
-            return (
-                {
-                    quantidade: 1,
-                    TipoRegistrador: i
-                }
-            )
-        }))
-        arrCicloPorInstrucao.setValue(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
-            return (
-                {
-                    quantidade: 1,
-                    TipoInstrucao: i
-                }
-            )
-        }))
-        const instrucaoDefault = arrInstrucoes.value[0];
-        instrucaoDefault.nome = 'Add';
-        instrucaoDefault.entrada1 = '';
-        instrucaoDefault.entrada2 = '';
-        instrucaoDefault.entrada3 = undefined;
-        instrucaoDefault.enviada = false;
-        instrucaoDefault.executada = false;
-        instrucaoDefault.escrita = false;
-        arrInstrucoes.setValue([...[instrucaoDefault]]);
-    }
-
-    return (
-        <Wrapper>
-            <button
-                disabled={confirmado}
-                onClick={() => onCliqueConfirmar()}
-            >
-                Confirmar
-            </button>
-            <button
-                onClick={() => onCliqueResetar()}
-            >
-                Resetar
-            </button>
-        </Wrapper >
-    );
+return (
+    <Wrapper>
+        <button
+            disabled={confirmado}
+            onClick={() => onCliqueConfirmar()}
+        >
+            Confirmar
+        </button>
+        <button
+            onClick={() => onCliqueResetar()}
+        >
+            Resetar
+        </button>
+    </Wrapper >
+);
 }
 
 export default BotoesConfimarResetar;

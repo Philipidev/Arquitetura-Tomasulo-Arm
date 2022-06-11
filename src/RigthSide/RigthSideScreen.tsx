@@ -1,19 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { IntrucaoContext } from '../App';
+import AvancarInstrucoes from './AvancarInstrucoes';
 import TabelaEstacaoReserva from './TabelaEstacaoReserva';
 import TabelaRegistradores from './TabelaRegistradores';
 import TabelasInstrucoes from './TabelasInstrucoes';
 
 
 const RigthSideScreen: React.FC = () => {
-    const {
-
-    } = useContext(IntrucaoContext);
 
     return (
         <Wrapper>
             <div className='registradores'>
+                <AvancarInstrucoes />
                 <TabelaRegistradores />
             </div>
             <div className='instrucao-estacao-reserva'>
@@ -36,9 +34,10 @@ const Wrapper = styled.div`
 
     .registradores{
         top: 0;
+        align-items: center;
         position: absolute;
         display: flex;
-        align-items: end;
+        flex-direction: column;
         margin-top: 20px;
     }
 

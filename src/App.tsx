@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useArray, UseArrayActions } from './hooks/useArray';
-import ListaInstrucoes from './LeftSide/ListaInstrucoes';
-import TabelasInstrucoes from './RigthSide/TabelasInstrucoes';
 import { TipoInstrucao } from './Enums/TipoInstrucao';
 import { TipoRegistrador } from './Enums/TipoRegistrador';
 import LeftSideScreen from './LeftSide/LeftSideScreen';
@@ -21,6 +19,8 @@ export interface IInstrucoes {
 export interface IEstacaoReserva {
 	nome: string;
 	TipoRegistrador: keyof typeof TipoRegistrador;
+	destino?: string;
+	registradorSendoUtilizado?: string;
 	ocupada: boolean;
 	operacao?: string;//Ver se é melhor criar uma tipagem para isso
 	Vj?: string;
@@ -56,13 +56,16 @@ export interface IIntrucaoContextProps {
 	quantidadeInstrucoes: number;
 	setConfirmado: React.Dispatch<React.SetStateAction<boolean>>;
 	confirmado: boolean;
+	setCicloAtual: React.Dispatch<React.SetStateAction<number>>;
+	cicloAtual: number;
 }
 
 export const IntrucaoContext = React.createContext<IIntrucaoContextProps>({} as IIntrucaoContextProps);
 
 function App() {
-    const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
-    const [confirmado, setConfirmado] = useState<boolean>(false);
+	const [cicloAtual, setCicloAtual] = React.useState(0);
+	const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
+	const [confirmado, setConfirmado] = useState<boolean>(false);
 	const arrInstrucoes = useArray<IInstrucoes>([]);
 	const arrEstacaoReserva = useArray<IEstacaoReserva>([]);
 	const arrRegistrador = useArray<IRegistrador>([]);
@@ -89,8 +92,9 @@ function App() {
 		arrRegistrador,
 		arrCicloPorInstrucao,
 		arrTipoRegistrador,
-		quantidadeInstrucoes,setQuantidadeInstrucoes,
+		quantidadeInstrucoes, setQuantidadeInstrucoes,
 		confirmado, setConfirmado,
+		cicloAtual, setCicloAtual,
 	}
 
 	return (
