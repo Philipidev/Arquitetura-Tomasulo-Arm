@@ -5,6 +5,7 @@ import ListaInstrucoes from './ListaInstrucoes';
 import TabelasInstrucoes from './TabelasInstrucoes';
 import { TipoInstrucao } from './Enums/TipoInstrucao';
 import { TipoRegistrador } from './Enums/TipoRegistrador';
+import 'antd/dist/antd.min.css';
 
 export interface IInstrucoes {
 	nome: keyof typeof TipoInstrucao;
