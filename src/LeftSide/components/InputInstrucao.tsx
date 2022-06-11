@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { IntrucaoContext } from './App';
-import { TipoInstrucao } from './Enums/TipoInstrucao';
+import { IntrucaoContext } from '../../App';
+import { TipoInstrucao } from '../../Enums/TipoInstrucao';
 
 interface IProps {
     index: number;
@@ -12,6 +12,7 @@ const InputInstrucao: React.FC<IProps> = ({
 }) => {
     const {
         arrInstrucoes,
+        confirmado,
     } = useContext(IntrucaoContext);
 
     const AssociarInstrucao = (valor: string, indexInstrucao: number) => {
@@ -58,14 +59,20 @@ const InputInstrucao: React.FC<IProps> = ({
                 Instrução {index + 1}
             </label>
             <select
+                disabled={confirmado}
                 style={{ width: '75px' }}
-                defaultValue={arrInstrucoes.value[index]?.nome ?? 'Add'}
-                onChange={(valor: any) => { AssociarInstrucao(valor, 4) }}
+                value={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
+                defaultValue={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
+                onChange={(valor) => { AssociarInstrucao(valor.target.value, 4) }}
             >
                 {
                     Object.keys(TipoInstrucao).map((i: any, ind: number) =>
-                        <option key={"option-tipo-instrucao-" + ind} value={i}>
-                            <div >
+                        <option
+                            disabled={confirmado}
+                            key={"option-tipo-instrucao-" + ind}
+                            value={i}
+                        >
+                            <div>
                                 <label>
                                     {i}
                                 </label>
@@ -75,13 +82,21 @@ const InputInstrucao: React.FC<IProps> = ({
                 }
             </select>
             <input
+                disabled={confirmado}
                 placeholder='Instrução'
+                value={arrInstrucoes.value[index]?.entrada1 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 1) }}
             />
-            <input placeholder='Instrução'
+            <input
+                disabled={confirmado}
+                placeholder='Instrução'
+                value={arrInstrucoes.value[index]?.entrada2 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 2) }}
             />
-            <input placeholder='Instrução'
+            <input
+                disabled={confirmado}
+                placeholder='Instrução'
+                value={arrInstrucoes.value[index]?.entrada3 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 3) }}
             />
         </Wrapper>

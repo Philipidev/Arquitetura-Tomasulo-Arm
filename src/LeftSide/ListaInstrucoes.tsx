@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import CiclosPorInstrucao from './CiclosPorInstrucao';
-import InputInstrucao from './InputInstrucao';
-import QuantidadeTipoRegistrador from './QuantidadeTipoRegistrador';
+import { IntrucaoContext } from '../App';
+import InputInstrucao from './components/InputInstrucao';
 
 
 
 const ListaInstrucoes: React.FC = () => {
-    const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
 
-    // const {
-
-    // } = useContext(IntrucaoContext);
+    const {
+        quantidadeInstrucoes,
+        setQuantidadeInstrucoes,
+        confirmado,
+    } = useContext(IntrucaoContext);
 
     const GerarCampoInstrucoes = () => {
         const arrFragmentInstrucao: JSX.Element[] = [];
@@ -28,17 +28,20 @@ const ListaInstrucoes: React.FC = () => {
                 </label>
                 <div className='qtd-instrucoes'>
                     <button
+                        disabled={confirmado}
                         onClick={() => { if (quantidadeInstrucoes === 1) return; setQuantidadeInstrucoes(quantidadeInstrucoes - 1); }}
                     >
                         -
                     </button>
 
                     <input
+                        disabled={confirmado}
                         type={'number'}
                         value={quantidadeInstrucoes}
                         onChange={(e) => { if (Number(e.target.value) <= 0) return; setQuantidadeInstrucoes(Number(e.target.value)) }}
                     />
                     <button
+                        disabled={confirmado}
                         onClick={() => setQuantidadeInstrucoes(quantidadeInstrucoes + 1)}
                     >
                         +
@@ -54,8 +57,6 @@ const ListaInstrucoes: React.FC = () => {
                     GerarCampoInstrucoes()
                 }
             </div>
-            <CiclosPorInstrucao />
-            <QuantidadeTipoRegistrador />
         </Wrapper >
     );
 }
@@ -68,7 +69,6 @@ const Wrapper = styled.div`
 	align-items: center;
 	justify-content: center;
     
-
     .qtd-instrucoes-wrapper{
         display: flex;
         flex-direction: column;
@@ -81,10 +81,6 @@ const Wrapper = styled.div`
             display: flex;
             flex-direction: row;
         }
-    }
-    .input-instrucoes{
-        display: flex;
-        flex-direction: row;
     }
     .lista-de-instrucoes{
         -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);

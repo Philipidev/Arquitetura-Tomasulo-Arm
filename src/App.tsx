@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useArray, UseArrayActions } from './hooks/useArray';
-import ListaInstrucoes from './ListaInstrucoes';
-import TabelasInstrucoes from './TabelasInstrucoes';
+import ListaInstrucoes from './LeftSide/ListaInstrucoes';
+import TabelasInstrucoes from './RigthSide/TabelasInstrucoes';
 import { TipoInstrucao } from './Enums/TipoInstrucao';
 import { TipoRegistrador } from './Enums/TipoRegistrador';
+import LeftSideScreen from './LeftSide/LeftSideScreen';
+import RigthSideScreen from './RigthSide/RigthSideScreen';
 
 export interface IInstrucoes {
 	nome: keyof typeof TipoInstrucao;
@@ -17,7 +19,7 @@ export interface IInstrucoes {
 }
 
 export interface IEstacaoReserva {
-	// nome: string;
+	nome: string;
 	TipoRegistrador: keyof typeof TipoRegistrador;
 	ocupada: boolean;
 	operacao?: string;//Ver se é melhor criar uma tipagem para isso
@@ -26,6 +28,7 @@ export interface IEstacaoReserva {
 	Qj?: string;
 	Qk?: string;
 	A?: string;
+	Ciclos?: number;
 }
 
 export interface IRegistrador {
@@ -49,11 +52,17 @@ export interface IIntrucaoContextProps {
 	arrRegistrador: UseArrayActions<IRegistrador>;
 	arrCicloPorInstrucao: UseArrayActions<ICicloPorInstrucao>;
 	arrTipoRegistrador: UseArrayActions<ITipoRegistrador>;
+	setQuantidadeInstrucoes: React.Dispatch<React.SetStateAction<number>>;
+	quantidadeInstrucoes: number;
+	setConfirmado: React.Dispatch<React.SetStateAction<boolean>>;
+	confirmado: boolean;
 }
 
 export const IntrucaoContext = React.createContext<IIntrucaoContextProps>({} as IIntrucaoContextProps);
 
 function App() {
+    const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
+    const [confirmado, setConfirmado] = useState<boolean>(false);
 	const arrInstrucoes = useArray<IInstrucoes>([]);
 	const arrEstacaoReserva = useArray<IEstacaoReserva>([]);
 	const arrRegistrador = useArray<IRegistrador>([]);
@@ -80,16 +89,18 @@ function App() {
 		arrRegistrador,
 		arrCicloPorInstrucao,
 		arrTipoRegistrador,
+		quantidadeInstrucoes,setQuantidadeInstrucoes,
+		confirmado, setConfirmado,
 	}
 
 	return (
 		<WrapperSiderContent>
 			<IntrucaoContext.Provider value={defaultValue}>
 				<div className='container-direita'>
-					<ListaInstrucoes />
+					<LeftSideScreen />
 				</div>
 				<div className='container-esquerda'>
-					<TabelasInstrucoes />
+					<RigthSideScreen />
 				</div>
 			</IntrucaoContext.Provider>
 		</WrapperSiderContent>
@@ -101,8 +112,9 @@ export default App;
 
 const WrapperSiderContent = styled.div`
 	display: flex;
+	flex: 1;
 	flex-direction: row;
-    height: 100%;
+    height: 99vh;
 
 	.container-direita{
 		width: 30%;

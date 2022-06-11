@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { IntrucaoContext } from './App';
-import { TipoInstrucao } from './Enums/TipoInstrucao';
+import { IntrucaoContext } from '../App';
+import { TipoInstrucao } from '../Enums/TipoInstrucao';
 
 interface IProps {
 }
 
 const CiclosPorInstrucao: React.FC<IProps> = () => {
     const {
-        arrCicloPorInstrucao
+        arrCicloPorInstrucao,
+        confirmado,
     } = useContext(IntrucaoContext);
 
     return (
@@ -23,6 +24,7 @@ const CiclosPorInstrucao: React.FC<IProps> = () => {
                             {i}
                         </label>
                         <input
+                            disabled={confirmado}
                             value={arrCicloPorInstrucao.findByStringId(i, 'TipoInstrucao').quantidade}
                             type="number"
                             onChange={(e) => {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { IEstacaoReserva, IntrucaoContext } from './App';
-import { TipoRegistrador } from './Enums/TipoRegistrador';
+import { IEstacaoReserva, IntrucaoContext } from '../App';
+import { TipoRegistrador } from '../Enums/TipoRegistrador';
 
 interface IProps {
 }
@@ -10,28 +10,39 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
     const {
         arrEstacaoReserva,
         arrTipoRegistrador,
+        confirmado,
     } = useContext(IntrucaoContext);
 
+    //@ts-ignore
+    var groupBy = function (xs, key): {} {
+        //@ts-ignore
+        return xs.reduce(function (rv, x) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+            return rv;
+        }, {});
+    };
 
     const onArrTipoRegistradorChanges = () => {
-        console.log('aaa')
-        const arrAuxEstacaoReserva = arrTipoRegistrador.value.flatMap((tr, index) => {
-            const arrAux: IEstacaoReserva[] = [];
-            for (let count = 0; count < tr.quantidade; count++) {
-                arrAux.push({
-                    TipoRegistrador: tr.TipoRegistrador,
-                    ocupada: false,
-                })
-            }
-            return arrAux;
+        const arrAux: IEstacaoReserva[] = [];
+        const arrayAgrupado = groupBy(arrTipoRegistrador.value, "TipoRegistrador");
+        console.log('arrayAgrupado', arrayAgrupado)
+        Object.keys(TipoRegistrador).forEach(tr => {
+            //@ts-ignore
+            arrayAgrupado[tr].forEach((g) => {
+                for (let i = 0; i < g.quantidade; i++) {
+                    arrAux.push({
+                        nome: `${g.TipoRegistrador}${i + 1}`,
+                        TipoRegistrador: g.TipoRegistrador,
+                        ocupada: false,
+                    })
+                }
+            })
         })
 
-        arrEstacaoReserva.setValue([...arrAuxEstacaoReserva]);
+        arrEstacaoReserva.setValue([...arrAux]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(onArrTipoRegistradorChanges, [arrTipoRegistrador.value])
-
-    console.log("arrEstacaoReserva", arrEstacaoReserva.value)
 
     return (
         <Wrapper>
@@ -45,6 +56,7 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
                             {i}
                         </label>
                         <input
+                            disabled={confirmado}
                             value={arrTipoRegistrador.findByStringId(i, 'TipoRegistrador').quantidade}
                             type="number"
                             onChange={(e) => {
