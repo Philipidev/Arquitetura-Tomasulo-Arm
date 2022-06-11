@@ -1,4 +1,3 @@
-import { Input } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { IEstacaoReserva, IntrucaoContext } from './App';
@@ -45,7 +44,7 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
                         <label>
                             {i}
                         </label>
-                        <Input
+                        <input
                             value={arrTipoRegistrador.findByStringId(i, 'TipoRegistrador').quantidade}
                             type="number"
                             onChange={(e) => {

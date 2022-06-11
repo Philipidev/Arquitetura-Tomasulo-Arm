@@ -1,4 +1,3 @@
-import { Input } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from './App';
@@ -23,7 +22,7 @@ const CiclosPorInstrucao: React.FC<IProps> = () => {
                         <label>
                             {i}
                         </label>
-                        <Input
+                        <input
                             value={arrCicloPorInstrucao.findByStringId(i, 'TipoInstrucao').quantidade}
                             type="number"
                             onChange={(e) => {

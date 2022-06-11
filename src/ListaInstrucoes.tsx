@@ -1,5 +1,3 @@
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Input } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CiclosPorInstrucao from './CiclosPorInstrucao';
@@ -29,22 +27,22 @@ const ListaInstrucoes: React.FC = () => {
                     Quantidade de instruções:
                 </label>
                 <div className='qtd-instrucoes'>
-                    <Button
+                    <button
                         onClick={() => { if (quantidadeInstrucoes === 1) return; setQuantidadeInstrucoes(quantidadeInstrucoes - 1); }}
                     >
-                        <MinusOutlined />
-                    </Button>
+                        -
+                    </button>
 
-                    <Input
+                    <input
                         type={'number'}
                         value={quantidadeInstrucoes}
                         onChange={(e) => { if (Number(e.target.value) <= 0) return; setQuantidadeInstrucoes(Number(e.target.value)) }}
                     />
-                    <Button
+                    <button
                         onClick={() => setQuantidadeInstrucoes(quantidadeInstrucoes + 1)}
                     >
-                        <PlusOutlined />
-                    </Button>
+                        +
+                    </button>
 
                 </div>
             </div>

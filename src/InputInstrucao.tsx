@@ -1,4 +1,3 @@
-import { Input, Select } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from './App';
@@ -58,32 +57,31 @@ const InputInstrucao: React.FC<IProps> = ({
             <label style={{ marginRight: '12px' }}>
                 Instrução {index + 1}
             </label>
-            <Select
+            <select
                 style={{ width: '75px' }}
                 defaultValue={arrInstrucoes.value[index]?.nome ?? 'Add'}
                 onChange={(valor: any) => { AssociarInstrucao(valor, 4) }}
             >
                 {
                     Object.keys(TipoInstrucao).map((i: any, ind: number) =>
-                        <Select.Option key={"option-tipo-instrucao-" + ind} value={i}>
+                        <option key={"option-tipo-instrucao-" + ind} value={i}>
                             <div >
                                 <label>
                                     {i}
                                 </label>
                             </div>
-
-                        </Select.Option>
+                        </option>
                     )
                 }
-            </Select>
-            <Input
+            </select>
+            <input
                 placeholder='Instrução'
                 onChange={(e) => { AssociarInstrucao(e.target.value, 1) }}
             />
-            <Input placeholder='Instrução'
+            <input placeholder='Instrução'
                 onChange={(e) => { AssociarInstrucao(e.target.value, 2) }}
             />
-            <Input placeholder='Instrução'
+            <input placeholder='Instrução'
                 onChange={(e) => { AssociarInstrucao(e.target.value, 3) }}
             />
         </Wrapper>
