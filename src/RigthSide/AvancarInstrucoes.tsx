@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { IEstacaoReserva, IInstrucoes, IntrucaoContext, IRegistrador } from '../App';
 import { TipoRegistrador } from '../Enums/TipoRegistrador';
-import { useArray } from '../hooks/useArray';
 
 
 const AvancarInstrucoes: React.FC = () => {
@@ -12,7 +11,6 @@ const AvancarInstrucoes: React.FC = () => {
         arrCicloPorInstrucao,
         arrEstacaoReserva,
         arrInstrucoes,
-        arrTipoRegistrador, 
         confirmado,
         cicloAtual,
         setCicloAtual
@@ -64,7 +62,6 @@ const AvancarInstrucoes: React.FC = () => {
                 }
                 else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Store) {
                     //TODO: validar se o registradorSendoUtilizado estiver sendo utilizado por alguma outra estacao de reserva (ocupada === true)
-                    //TODO: se exitir pendencia para o registrador entrada1 tem que colocar no Qj/Qk e nao no A
                     estacaoReservaVazia.ocupada = true;
                     estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
                     estacaoReservaVazia.operacao = instrucaoAtual.nome;
@@ -75,7 +72,6 @@ const AvancarInstrucoes: React.FC = () => {
                 }
                 else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Inteiro) {
                     //TODO: validar se o registradorSendoUtilizado estiver sendo utilizado por alguma outra estacao de reserva (ocupada === true)
-                    //TODO: se exitir pendencia para o registrador entrada1 tem que colocar no Qj/Qk e nao no A
                     estacaoReservaVazia.ocupada = true;
                     estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
                     estacaoReservaVazia.operacao = instrucaoAtual.nome;
@@ -84,26 +80,21 @@ const AvancarInstrucoes: React.FC = () => {
                     const estacaoPendenteEnt2 = arrEstacaoReserva.value.find(er => er.ocupada && er.destino === instrucaoAtual.entrada2);
                     const estacaoPendenteEnt3 = arrEstacaoReserva.value.find(er => er.ocupada && er.destino === instrucaoAtual.entrada3);
                     if (estacaoPendenteEnt2) {
-                        console.log('entrou aqui estacaoPendenteEnt2', estacaoPendenteEnt2)
                         estacaoReservaVazia.Qj = `${estacaoPendenteEnt2.nome}_${estacaoPendenteEnt2.destino}`;
                     }
                     else {
-                        console.log('entrou aqui else estacaoPendenteEnt2', estacaoPendenteEnt2)
                         estacaoReservaVazia.Vj = instrucaoAtual.entrada2
                     }
                     if (estacaoPendenteEnt3) {
-                        console.log('entrou aqui estacaoPendenteEnt3', estacaoPendenteEnt3)
                         estacaoReservaVazia.Qk = `${estacaoPendenteEnt3.nome}_${estacaoPendenteEnt3.destino}`;
                     }
                     else {
-                        console.log('entrou aqui else estacaoPendenteEnt3', estacaoPendenteEnt3)
                         estacaoReservaVazia.Vk = instrucaoAtual.entrada3
                     }
                 }
                 // else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Flutuante) {
                 else {
                     //TODO: validar se o registradorSendoUtilizado estiver sendo utilizado por alguma outra estacao de reserva (ocupada === true)
-                    //TODO: se exitir pendencia para o registrador entrada1 tem que colocar no Qj/Qk e nao no A
                     estacaoReservaVazia.ocupada = true;
                     estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
                     estacaoReservaVazia.operacao = instrucaoAtual.nome;
@@ -112,33 +103,24 @@ const AvancarInstrucoes: React.FC = () => {
                     const estacaoPendenteEnt2 = arrEstacaoReserva.value.find(er => er.ocupada && er.destino === instrucaoAtual.entrada2);
                     const estacaoPendenteEnt3 = arrEstacaoReserva.value.find(er => er.ocupada && er.destino === instrucaoAtual.entrada3);
                     if (estacaoPendenteEnt2) {
-                        console.log('entrou aqui estacaoPendenteEnt2', estacaoPendenteEnt2)
                         estacaoReservaVazia.Qj = `${estacaoPendenteEnt2.nome}_${estacaoPendenteEnt2.destino}`;
                     }
                     else {
-                        console.log('entrou aqui else estacaoPendenteEnt2', estacaoPendenteEnt2)
                         estacaoReservaVazia.Vj = instrucaoAtual.entrada2
                     }
                     if (estacaoPendenteEnt3) {
-                        console.log('entrou aqui estacaoPendenteEnt3', estacaoPendenteEnt3)
                         estacaoReservaVazia.Qk = `${estacaoPendenteEnt3.nome}_${estacaoPendenteEnt3.destino}`;
                     }
                     else {
-                        console.log('entrou aqui else estacaoPendenteEnt3', estacaoPendenteEnt3)
                         estacaoReservaVazia.Vk = instrucaoAtual.entrada3
                     }
                 }
             }
             else {
                 arrInstrucoesConfirmadas.current = [...[instrucaoAtual], ...arrInstrucoesConfirmadas.current];
-                // estacao ocupada para a instrucao, entao apenas fazer o ciclo das estacoes de reserva
             }
         }
 
-        //Implementar ciclo para cada item ocupado da estacao de reserva
-        //Diminuir contador de ciclo analisando pendencias QJ/Qk 
-        //Limpar estacao de reserva quando o contador de ciclo for 0
-        //quando ciclo da estacao de reservar terminar passar o valor para o registrador
         const arrRegParaAtualizar: IRegistrador[] = [];
         const arrAuxER = arrEstacaoReserva.value.sort((a, b) => (a.Ciclos ?? 0) - (b.Ciclos ?? 0)).map(er => {
             if (er.ocupada) {
@@ -221,6 +203,7 @@ const AvancarInstrucoes: React.FC = () => {
             arrInstrucoesConfirmadas.current = [];
         }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(onStart, [confirmado])
 
 

@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { reduceEachTrailingCommentRange } from 'typescript';
 import { IntrucaoContext } from '../App';
 import { TipoInstrucao } from '../Enums/TipoInstrucao';
 import { TipoRegistrador } from '../Enums/TipoRegistrador';
@@ -13,7 +12,6 @@ const BotoesConfimarResetar: React.FC = () => {
         arrInstrucoes,
         arrCicloPorInstrucao,
         arrTipoRegistrador,
-        arrEstacaoReserva,
         arrRegistrador,
         setQuantidadeInstrucoes,
         confirmado, setConfirmado,
@@ -31,32 +29,10 @@ const BotoesConfimarResetar: React.FC = () => {
                 ehValido = false;
                 alert(`'Instrução ${ind + 1}' ${i.nome} deve ter 3 entradas (entrada1 e entrada2 e entrada3)`);
             }
-            // if ((i.nome === TipoInstrucao.Ldr || i.nome === TipoInstrucao.Ldr) && (!i.entrada1 || !i.entrada2)) {
-            //     ehValido = false;
-            //     alert(`'Instrução ${ind + 1}' ${i.nome} deve ter 2 entradas (entrada1 e entrada2)`);
-            // }
             //TODO mais validacoes
         })
         if (!ehValido)
             return;
-
-        // arrInstrucoes.setValue([...arrInstrucoes.value.map(i => {
-        //     i.Ciclos = arrCicloPorInstrucao.findByStringId(i.nome, 'TipoInstrucao').quantidade;
-        //     return i;
-        // })]);
-
-        // arrEstacaoReserva.setValue([...arrEstacaoReserva.value.map(er => {
-        //     if(TipoRegistrador.DivF === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
-        //     }
-        //     else  if(TipoRegistrador.Inteiro === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Div, 'TipoInstrucao').quantidade;
-        //     }
-        //     else if(TipoRegistrador.MulF === er.TipoRegistrador){
-        //         er.Ciclos = arrCicloPorInstrucao.findByStringId(TipoInstrucao.Mul, 'TipoInstrucao').quantidade;
-        //     }
-        //     return er;
-        // })])
 
         setConfirmado(true);
     }
