@@ -19,11 +19,11 @@ const InputInstrucao: React.FC<IProps> = ({
         const newArray = arrInstrucoes.value.map((i, ind) => {
             if (ind === index) {
                 if (indexInstrucao === 1)
-                    i.entrada1 = valor;
+                    i.entrada1 = valor?.toUpperCase();
                 else if (indexInstrucao === 2)
-                    i.entrada2 = valor;
+                    i.entrada2 = valor?.toUpperCase();
                 else if (indexInstrucao === 3)
-                    i.entrada3 = valor;
+                    i.entrada3 = valor?.toUpperCase();
                 else if (indexInstrucao === 4)
                     i.nome = valor as any;
             }
@@ -32,9 +32,17 @@ const InputInstrucao: React.FC<IProps> = ({
         arrInstrucoes.setValue([...newArray]);
     }
 
+    function uuid(mask = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
+        return `${mask}`.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+
     const onMount = () => {
         if (index >= arrInstrucoes.length)
             arrInstrucoes.push({
+                id: uuid(),
                 nome: 'Add',
                 enviada: false,
                 executada: false,

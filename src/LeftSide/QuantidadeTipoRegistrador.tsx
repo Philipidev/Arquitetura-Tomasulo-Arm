@@ -25,7 +25,6 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
     const onArrTipoRegistradorChanges = () => {
         const arrAux: IEstacaoReserva[] = [];
         const arrayAgrupado = groupBy(arrTipoRegistrador.value, "TipoRegistrador");
-        console.log('arrayAgrupado', arrayAgrupado)
         Object.keys(TipoRegistrador).forEach(tr => {
             //@ts-ignore
             arrayAgrupado[tr].forEach((g) => {

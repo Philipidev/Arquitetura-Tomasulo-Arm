@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../App';
+import Compare from '../utils/orderStringWithNumbers';
 
 
 const TabelaEstacaoReserva: React.FC = () => {
@@ -27,14 +28,15 @@ const TabelaEstacaoReserva: React.FC = () => {
                             <th>Qj</th>
                             <th>Qk</th>
                             <th>A</th>
+                            <th>Destino</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             (arrEstacaoReserva && arrEstacaoReserva.value && arrEstacaoReserva.value.length)
-                                ? arrEstacaoReserva.value.map((estacaoReserva, ind) =>
+                                ? arrEstacaoReserva.value.sort((a, b) => Compare(a.nome, b.nome)).map((estacaoReserva, ind) =>
                                     <tr key={"tr-estacao-reserva" + ind}>
-                                        <td>{estacaoReserva.Ciclos ? estacaoReserva.Ciclos.toString() : ''}</td>
+                                        <td>{estacaoReserva.Ciclos !== undefined ? estacaoReserva.Ciclos.toString() : ''}</td>
                                         <td>{estacaoReserva.nome}</td>
                                         <td>{estacaoReserva.ocupada ? 'X' : ''}</td>
                                         <td>{estacaoReserva.operacao}</td>
@@ -43,6 +45,7 @@ const TabelaEstacaoReserva: React.FC = () => {
                                         <td>{estacaoReserva.Qj}</td>
                                         <td>{estacaoReserva.Qk}</td>
                                         <td>{estacaoReserva.A}</td>
+                                        <td>{estacaoReserva.destino}</td>
                                     </tr>
                                 )
                                 :

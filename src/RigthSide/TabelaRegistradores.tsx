@@ -13,40 +13,32 @@ const TabelaRegistradores: React.FC = () => {
             <label>
                 Registradores
             </label>
-
-                <STabela>
-                    {
-                        (arrRegistrador && arrRegistrador.value && arrRegistrador.value.length)
-                            ? arrRegistrador.value.map(registrador =>
-                                <>
-                                    <thead>
-                                        <tr>
-                                            <th>{registrador.nome}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{registrador.valor}</td>
-                                        </tr>
-                                    </tbody>
-                                </>
-                            )
-                            :
-                            <>
-                                <thead>
-                                    <tr>
-                                        <th>--</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>--</td>
-                                    </tr>
-                                </tbody>
-                            </>
-                    }
-                </STabela>
-
+            <STabela>
+                <thead>
+                    <tr>
+                        {
+                            (arrRegistrador && arrRegistrador.value && arrRegistrador.value.length)
+                                ? arrRegistrador.value.map(registrador =>
+                                    <th>{registrador.nome}</th>
+                                )
+                                :
+                                <th>--</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {
+                            (arrRegistrador && arrRegistrador.value && arrRegistrador.value.length)
+                                ? arrRegistrador.value.map(registrador =>
+                                    <td>{registrador.valor}</td>
+                                )
+                                :
+                                <td>--</td>
+                        }
+                    </tr>
+                </tbody>
+            </STabela>
         </Wrapper>
     );
 }

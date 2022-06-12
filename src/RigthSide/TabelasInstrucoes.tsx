@@ -38,8 +38,8 @@ const TabelasInstrucoes: React.FC = () => {
                                             }
                                         </td>
                                         <td>{instrucao.enviada ? 'X' : ''}</td>
-                                        <td>{instrucao.escrita ? 'X' : ''}</td>
                                         <td>{instrucao.executada ? 'X' : ''}</td>
+                                        <td>{instrucao.escrita ? 'X' : ''}</td>
                                     </tr>
                                 )
                                 :
@@ -64,7 +64,7 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-    
+
     .wrapper-tabela{
         overflow-y: scroll;
     }

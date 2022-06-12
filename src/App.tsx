@@ -7,6 +7,7 @@ import LeftSideScreen from './LeftSide/LeftSideScreen';
 import RigthSideScreen from './RigthSide/RigthSideScreen';
 
 export interface IInstrucoes {
+	id: string;
 	nome: keyof typeof TipoInstrucao;
 	enviada: boolean;
 	executada: boolean;
@@ -18,6 +19,7 @@ export interface IInstrucoes {
 
 export interface IEstacaoReserva {
 	nome: string;
+	idInstrucao?: string;
 	TipoRegistrador: keyof typeof TipoRegistrador;
 	destino?: string;
 	registradorSendoUtilizado?: string;
@@ -68,7 +70,7 @@ function App() {
 	const [confirmado, setConfirmado] = useState<boolean>(false);
 	const arrInstrucoes = useArray<IInstrucoes>([]);
 	const arrEstacaoReserva = useArray<IEstacaoReserva>([]);
-	const arrRegistrador = useArray<IRegistrador>([]);
+	const arrRegistrador = useArray<IRegistrador>(new Array(16).fill({ nome: '', valor: '' }).map((i, ind) => ({ nome: `F${ind}`, valor: '' })));
 	const arrCicloPorInstrucao = useArray<ICicloPorInstrucao>(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
 		return (
 			{

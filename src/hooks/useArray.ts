@@ -14,7 +14,7 @@ export interface UseArrayActions<T> {
     simpleRemoveById: (id: any) => void,
     removeIndex: (index: number) => void,
     selectById: (index: number|string, idLabel?: string) => void,
-    editById: (id: number, entity: T, idLabel?: string) => void,
+    editById: (id: string, entity: T, idLabel?: string) => void,
     findById: (index: number, idLabel?: string) => T,
     findByStringId: (index: string, idLabel?: string) => T,
     simpleFind: (id: any) => T,
@@ -60,7 +60,7 @@ export function useArray<T>(initialValue: T[]): UseArrayActions<T> {
             )
         , []);
 
-    const editById = (id: number, entity: T, idLabel: string = 'id') => {
+    const editById = (id: string, entity: T, idLabel: string = 'id') => {
         //@ts-ignore
         const foundIndex = value.findIndex((element: T) => element[idLabel] === id)
         value[foundIndex] = entity
