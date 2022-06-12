@@ -1,3 +1,5 @@
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Card, Input } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../App';
@@ -21,41 +23,47 @@ const ListaInstrucoes: React.FC = () => {
     }
 
     return (
-        <Wrapper>
-            <div className='qtd-instrucoes-wrapper'>
-                <label >
-                    Quantidade de instruções:
-                </label>
+        <Wrapper
+            title='Quantidade de instruções'
+            bodyStyle={{ overflowY: 'scroll' }}
+        >
+            <div
+                className='qtd-instrucoes-wrapper'
+            >
                 <div className='qtd-instrucoes'>
-                    <button
+                    <Button
                         disabled={confirmado}
                         onClick={() => { if (quantidadeInstrucoes === 1) return; setQuantidadeInstrucoes(quantidadeInstrucoes - 1); }}
                     >
-                        -
-                    </button>
-
-                    <input
+                        <MinusOutlined />
+                    </Button>
+                    <Input
                         disabled={confirmado}
                         type={'number'}
                         value={quantidadeInstrucoes}
                         onChange={(e) => { if (Number(e.target.value) <= 0) return; setQuantidadeInstrucoes(Number(e.target.value)) }}
                     />
-                    <button
+                    <Button
                         disabled={confirmado}
                         onClick={() => setQuantidadeInstrucoes(quantidadeInstrucoes + 1)}
                     >
-                        +
-                    </button>
+                        <PlusOutlined />
+                    </Button>
 
                 </div>
             </div>
-            <div className='lista-de-instrucoes'>
-                <label >
-                    Lista de instruções:
-                </label>
-                {
-                    GerarCampoInstrucoes()
-                }
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+
+                <Card
+                    title="Lista de instruções"
+                    type="inner"
+                    style={{ width: '90%', alignSelf: 'center' }}
+                // bodyStyle={{ width: '10%' }}
+                >
+                    {
+                        GerarCampoInstrucoes()
+                    }
+                </Card>
             </div>
         </Wrapper >
     );
@@ -63,29 +71,26 @@ const ListaInstrucoes: React.FC = () => {
 
 export default ListaInstrucoes;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Card)`
 	display: flex;
+    position: relative;
 	flex-direction: column;
+    height: 56vh;
+    width: 90%;
 	align-items: center;
-	justify-content: center;
-    
+	justify-content: flex-start;
+    margin-top: 15px;
+    -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+
     .qtd-instrucoes-wrapper{
         display: flex;
         flex-direction: column;
-        margin-bottom: 40px;
         align-items: center;
-        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
         .qtd-instrucoes{
             display: flex;
             flex-direction: row;
         }
-    }
-    .lista-de-instrucoes{
-        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        margin-bottom: 15px;
     }
 `;

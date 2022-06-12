@@ -34,18 +34,20 @@ const Wrapper = styled.div`
 
     .registradores{
         top: 0;
-        align-items: center;
         position: absolute;
         display: flex;
+        justify-content: center;
+        align-items: center;
         flex-direction: column;
         margin-top: 20px;
     }
 
     .instrucao-estacao-reserva{
-        max-height: 600px;
+        height: 40vh;
         display: flex;
         flex-direction: row;
         width: 100%;
         justify-content: space-around;
+        align-items: flex-start;
     }
 `;

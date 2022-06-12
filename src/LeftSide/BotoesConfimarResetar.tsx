@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../App';
@@ -15,7 +16,8 @@ const BotoesConfimarResetar: React.FC = () => {
         arrRegistrador,
         setQuantidadeInstrucoes,
         confirmado, setConfirmado,
-        setCicloAtual
+        setCicloAtual,
+        cicloAtual,
     } = useContext(IntrucaoContext);
 
     const onCliqueConfirmar = () => {
@@ -71,17 +73,25 @@ const BotoesConfimarResetar: React.FC = () => {
 
     return (
         <Wrapper>
-            <button
-                disabled={confirmado}
-                onClick={() => onCliqueConfirmar()}
-            >
-                Confirmar
-            </button>
-            <button
-                onClick={() => onCliqueResetar()}
-            >
-                Resetar
-            </button>
+            <div className='Wrapper-bottoes'>
+                <div>
+                    <Button
+                        style={{ marginRight: '10px' }}
+                        disabled={confirmado && cicloAtual > 0}
+                        type={'primary'}
+                        onClick={() => onCliqueConfirmar()}
+                    >
+                        Confirmar
+                    </Button>
+                </div>
+                <div>
+                    <Button
+                        onClick={() => onCliqueResetar()}
+                    >
+                        Resetar
+                    </Button>
+                </div>
+            </div>
         </Wrapper >
     );
 }
@@ -89,11 +99,12 @@ const BotoesConfimarResetar: React.FC = () => {
 export default BotoesConfimarResetar;
 
 const Wrapper = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-    width: 50%;
-    justify-content: space-evenly;
+    position: absolute;
+    bottom: 20px;
+    .Wrapper-bottoes{
+        display: flex;
+        flex-direction: row;
+    }
     -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);

@@ -5,6 +5,9 @@ import { TipoInstrucao } from './Enums/TipoInstrucao';
 import { TipoRegistrador } from './Enums/TipoRegistrador';
 import LeftSideScreen from './LeftSide/LeftSideScreen';
 import RigthSideScreen from './RigthSide/RigthSideScreen';
+import 'antd/dist/antd.min.css';
+import { Divider } from 'antd';
+
 
 export interface IInstrucoes {
 	id: string;
@@ -105,6 +108,7 @@ function App() {
 				<div className='container-direita'>
 					<LeftSideScreen />
 				</div>
+				<Divider style={{ height: '100vh' }} type='vertical' />
 				<div className='container-esquerda'>
 					<RigthSideScreen />
 				</div>
@@ -122,13 +126,18 @@ const WrapperSiderContent = styled.div`
 	flex-direction: row;
     height: 99vh;
 
+	.ant-card {
+		background-color: white;
+	}
+
 	.container-direita{
 		width: 30%;
 		height: 100%;
-		border-right: 1px solid grey;
+		background-color: whitesmoke;
 	}
 	.container-esquerda{
 		width: 70%;
 		height: 100%;
+		background-color: whitesmoke;
 	}
 `;

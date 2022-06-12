@@ -1,3 +1,5 @@
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { Button, Tag } from 'antd';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { IEstacaoReserva, IInstrucoes, IntrucaoContext, IRegistrador } from '../App';
@@ -209,15 +211,19 @@ const AvancarInstrucoes: React.FC = () => {
 
     return (
         <Wrapper>
-            <label className='ciclo-atual-label'>
+            <Tag 
+                color={confirmado ? 'processing' : 'default'}
+            >
                 Ciclo: {cicloAtual}
-            </label>
-            <button
+            </Tag>
+            <Button
                 onClick={avancarInstrucoes}
                 disabled={!confirmado}
+                type={'primary'}
             >
                 Avançar
-            </button>
+                <ArrowRightOutlined />
+            </Button>
         </Wrapper >
     );
 }

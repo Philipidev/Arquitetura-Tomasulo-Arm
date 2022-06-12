@@ -12,8 +12,10 @@ const LeftSideScreen: React.FC = () => {
     return (
         <Wrapper>
             <ListaInstrucoes />
-            <CiclosPorInstrucao />
-            <QuantidadeTipoRegistrador />
+            <div className='wrapper-ciclos-registrador'>
+                <CiclosPorInstrucao />
+                <QuantidadeTipoRegistrador />
+            </div>
             <BotoesConfimarResetar />
         </Wrapper >
     );
@@ -25,30 +27,14 @@ const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-    
+	justify-content: flex-start;
+    position: relative;
+    height: 100%;
 
-    .qtd-instrucoes-wrapper{
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 40px;
-        align-items: center;
-        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        .qtd-instrucoes{
-            display: flex;
-            flex-direction: row;
-        }
-    }
-    .input-instrucoes{
+    .wrapper-ciclos-registrador{
         display: flex;
         flex-direction: row;
-    }
-    .lista-de-instrucoes{
-        -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-        margin-bottom: 15px;
+        margin-top: 15px;
+        justify-content: space-around;
     }
 `;

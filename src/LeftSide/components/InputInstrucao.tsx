@@ -1,3 +1,4 @@
+import { Input, Select } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../../App';
@@ -33,8 +34,8 @@ const InputInstrucao: React.FC<IProps> = ({
     }
 
     function uuid(mask = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
-        return `${mask}`.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return `${mask}`.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -64,18 +65,18 @@ const InputInstrucao: React.FC<IProps> = ({
     return (
         <Wrapper>
             <label style={{ marginRight: '12px' }}>
-                Instrução {index + 1}
+                Instr{index + 1}
             </label>
-            <select
+            <Select
                 disabled={confirmado}
-                style={{ width: '75px' }}
+                style={{ width: '75px', marginRight: '2px' }}
                 value={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
                 defaultValue={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
-                onChange={(valor) => { AssociarInstrucao(valor.target.value, 4) }}
+                onChange={(valor) => { AssociarInstrucao(valor, 4) }}
             >
                 {
                     Object.keys(TipoInstrucao).map((i: any, ind: number) =>
-                        <option
+                        <Select.Option
                             disabled={confirmado}
                             key={"option-tipo-instrucao-" + ind}
                             value={i}
@@ -85,25 +86,25 @@ const InputInstrucao: React.FC<IProps> = ({
                                     {i}
                                 </label>
                             </div>
-                        </option>
+                        </Select.Option>
                     )
                 }
-            </select>
-            <input
+            </Select>
+            <Input
                 disabled={confirmado}
-                placeholder='Instrução'
+                placeholder='Reg Destino'
                 value={arrInstrucoes.value[index]?.entrada1 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 1) }}
             />
-            <input
+            <Input
                 disabled={confirmado}
-                placeholder='Instrução'
+                placeholder='Reg Origem'
                 value={arrInstrucoes.value[index]?.entrada2 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 2) }}
             />
-            <input
+            <Input
                 disabled={confirmado}
-                placeholder='Instrução'
+                placeholder='Reg Origem'
                 value={arrInstrucoes.value[index]?.entrada3 ?? ''}
                 onChange={(e) => { AssociarInstrucao(e.target.value, 3) }}
             />
@@ -118,10 +119,10 @@ const Wrapper = styled.div`
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-    -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-    -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-    box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
+    margin: 2px;
+    width: 100%;
     input{
         width: 100px;
+        margin-right: 2px;
     }
 `;

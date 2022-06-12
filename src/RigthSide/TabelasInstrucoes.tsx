@@ -1,3 +1,4 @@
+import { Card } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../App';
@@ -9,11 +10,10 @@ const TabelasInstrucoes: React.FC = () => {
     } = useContext(IntrucaoContext);
 
     return (
-        <Wrapper>
-            <label>
-                Instruções
-            </label>
-            <div className='wrapper-tabela'>
+        <Wrapper
+            title='Instruções'
+            bodyStyle={{ overflowY: 'scroll' }}
+        >
 
                 <STabela>
                     <thead>
@@ -52,22 +52,20 @@ const TabelasInstrucoes: React.FC = () => {
                         }
                     </tbody>
                 </STabela>
-            </div>
         </Wrapper >
     );
 }
 
 export default TabelasInstrucoes;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Card)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+    height: fit-content;
+    max-height: 60vh;
 
-    .wrapper-tabela{
-        overflow-y: scroll;
-    }
 `;
 
 const STabela = styled.table`

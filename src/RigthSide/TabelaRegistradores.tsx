@@ -1,3 +1,4 @@
+import { Card } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IntrucaoContext } from '../App';
@@ -9,10 +10,9 @@ const TabelaRegistradores: React.FC = () => {
     } = useContext(IntrucaoContext);
 
     return (
-        <Wrapper>
-            <label>
-                Registradores
-            </label>
+        <Wrapper
+            title='Registradores'
+        >
             <STabela>
                 <thead>
                     <tr>
@@ -45,11 +45,12 @@ const TabelaRegistradores: React.FC = () => {
 
 export default TabelaRegistradores;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Card)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;    
+    margin-top: 10px;
 `;
 
 

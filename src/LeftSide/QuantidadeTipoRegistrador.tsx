@@ -1,3 +1,4 @@
+import { Card, Input } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { IEstacaoReserva, IntrucaoContext } from '../App';
@@ -44,17 +45,16 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
     useEffect(onArrTipoRegistradorChanges, [arrTipoRegistrador.value])
 
     return (
-        <Wrapper>
-            <label>
-                Quantidade tipo registrador:
-            </label>
+        <Wrapper
+            title="Quantidade tipo registrador"
+        >
             {
                 Object.keys(TipoRegistrador).map((i: any, ind: number) =>
                     <div className='tipo-registrador' key={'tipo-registrador-' + ind}>
                         <label>
                             {i}
                         </label>
-                        <input
+                        <Input
                             disabled={confirmado}
                             value={arrTipoRegistrador.findByStringId(i, 'TipoRegistrador').quantidade}
                             type="number"
@@ -81,26 +81,23 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
 
 export default QuantidadeTipoRegistrador;
 
-const Wrapper = styled.div`
-	display: flex;
+const Wrapper = styled(Card)`
+    display: flex;
 	flex-direction: column;
-    margin-bottom: 15px;
-    align-items: end;
+    align-items: center;
+    width: 45%;
+
     -webkit-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     -moz-box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
     box-shadow: 8px 7px 28px -17px rgba(29,26,71,0.57);
-
     .tipo-registrador{
         display: flex;
         flex-direction: row;
         margin-bottom: 3px;
-        
-        label{
-            margin-right: 10px;
-        }
+        align-items: center;
+        justify-content: center;
     }
-
-    input{
-        width: 100px;
+    label{
+        width: 45%;
     }
 `;
