@@ -12,7 +12,7 @@ const AvancarInstrucoes: React.FC = () => {
         arrCicloPorInstrucao,
         arrEstacaoReserva,
         arrInstrucoes,
-        arrTipoRegistrador,
+        arrTipoRegistrador, 
         confirmado,
         cicloAtual,
         setCicloAtual
