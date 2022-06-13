@@ -1,11 +1,13 @@
 # Site publicado na azure para teste
 
 Url: https://arquitetura-tomasulo-arm.azurewebsites.net/
+`#Caso offline rode localmente a aplicação seguindo os passos abaixo#`
 
 # Ou Rodando Localmente a Aplicação
 
 ## Requisitos
--Node
+-Node (https://nodejs.org/en/download/)
+`#Versão utilizada na criação do projeto v16.13.2#`
 
 ## Passo a Passo
 ```
