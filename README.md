@@ -4,10 +4,10 @@ Url: https://arquitetura-tomasulo-arm.azurewebsites.net/
 
 # Ou Rodando Localmente a Aplicação
 
-##Requisitos
+## Requisitos
 -Node
 
-##Passo a Passo
+## Passo a Passo
 ```
 git clone https://github.com/Philipidev/Arquitetura-Tomasulo-Arm.git
 ```
