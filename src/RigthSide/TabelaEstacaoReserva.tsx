@@ -12,7 +12,7 @@ const TabelaEstacaoReserva: React.FC = () => {
 
     return (
         <Wrapper
-            title='Estação de Reserva'
+            title='Estações de Reserva'
             bodyStyle={{ overflowY: 'scroll' }}
         >
 
