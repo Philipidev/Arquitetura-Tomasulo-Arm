@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import AvancarInstrucoes from './AvancarInstrucoes';
 import TabelaEstacaoReserva from './TabelaEstacaoReserva';
 import TabelaRegistradores from './TabelaRegistradores';
+import TabelaReordenamento from './TabelaReordenamento';
 import TabelasInstrucoes from './TabelasInstrucoes';
 
 
@@ -15,7 +16,8 @@ const RigthSideScreen: React.FC = () => {
                 <TabelaRegistradores />
             </div>
             <div className='instrucao-estacao-reserva'>
-                <TabelasInstrucoes />
+                {/* <TabelasInstrucoes /> */}
+                <TabelaReordenamento />
                 <TabelaEstacaoReserva />
             </div>
         </Wrapper >

@@ -15,6 +15,7 @@ export interface IInstrucoes {
 	enviada: boolean;
 	executada: boolean;
 	escrita: boolean;
+	commited: boolean;
 	entrada1: string;
 	entrada2: string;
 	entrada3?: string;
@@ -51,27 +52,36 @@ export interface ITipoRegistrador {
 	quantidade: number;
 }
 
+export interface IBufferReordenamento {
+	idInstrucao: string;
+	valor?: string;
+}
+
 export interface IIntrucaoContextProps {
 	arrInstrucoes: UseArrayActions<IInstrucoes>;
 	arrEstacaoReserva: UseArrayActions<IEstacaoReserva>;
 	arrRegistrador: UseArrayActions<IRegistrador>;
 	arrCicloPorInstrucao: UseArrayActions<ICicloPorInstrucao>;
 	arrTipoRegistrador: UseArrayActions<ITipoRegistrador>;
+	arrBufferReordenamento: UseArrayActions<IBufferReordenamento>;
 	setQuantidadeInstrucoes: React.Dispatch<React.SetStateAction<number>>;
 	quantidadeInstrucoes: number;
 	setConfirmado: React.Dispatch<React.SetStateAction<boolean>>;
 	confirmado: boolean;
 	setCicloAtual: React.Dispatch<React.SetStateAction<number>>;
 	cicloAtual: number;
+	tamnhoBuffer: number;
 }
 
 export const IntrucaoContext = React.createContext<IIntrucaoContextProps>({} as IIntrucaoContextProps);
 
 function App() {
+	const tamnhoBuffer = 6;
 	const [cicloAtual, setCicloAtual] = React.useState(0);
 	const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
 	const [confirmado, setConfirmado] = useState<boolean>(false);
 	const arrInstrucoes = useArray<IInstrucoes>([]);
+	const arrBufferReordenamento = useArray<IBufferReordenamento>([]);
 	const arrEstacaoReserva = useArray<IEstacaoReserva>([]);
 	const arrRegistrador = useArray<IRegistrador>(new Array(16).fill({ nome: '', valor: '' }).map((i, ind) => ({ nome: `F${ind}`, valor: '' })));
 	const arrCicloPorInstrucao = useArray<ICicloPorInstrucao>(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
@@ -96,10 +106,12 @@ function App() {
 		arrEstacaoReserva,
 		arrRegistrador,
 		arrCicloPorInstrucao,
+		arrBufferReordenamento,
 		arrTipoRegistrador,
 		quantidadeInstrucoes, setQuantidadeInstrucoes,
 		confirmado, setConfirmado,
 		cicloAtual, setCicloAtual,
+		tamnhoBuffer
 	}
 
 	return (

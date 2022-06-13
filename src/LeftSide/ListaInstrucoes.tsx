@@ -32,19 +32,16 @@ const ListaInstrucoes: React.FC = () => {
             >
                 <div className='qtd-instrucoes'>
                     <Button
-                        disabled={confirmado}
                         onClick={() => { if (quantidadeInstrucoes === 1) return; setQuantidadeInstrucoes(quantidadeInstrucoes - 1); }}
                     >
                         <MinusOutlined />
                     </Button>
                     <Input
-                        disabled={confirmado}
                         type={'number'}
                         value={quantidadeInstrucoes}
                         onChange={(e) => { if (Number(e.target.value) <= 0) return; setQuantidadeInstrucoes(Number(e.target.value)) }}
                     />
                     <Button
-                        disabled={confirmado}
                         onClick={() => setQuantidadeInstrucoes(quantidadeInstrucoes + 1)}
                     >
                         <PlusOutlined />

@@ -15,9 +15,11 @@ const BotoesConfimarResetar: React.FC = () => {
         arrTipoRegistrador,
         arrRegistrador,
         setQuantidadeInstrucoes,
+        arrEstacaoReserva,
         confirmado, setConfirmado,
         setCicloAtual,
         cicloAtual,
+        arrBufferReordenamento,
     } = useContext(IntrucaoContext);
 
     const onCliqueConfirmar = () => {
@@ -36,6 +38,30 @@ const BotoesConfimarResetar: React.FC = () => {
         if (!ehValido)
             return;
 
+        arrInstrucoes.setValue([...arrInstrucoes.value.map(i => {
+            i.enviada = false;
+            i.escrita = false;
+            i.executada = false;
+            i.commited = false;
+            return i;
+        })])
+        arrRegistrador.setValue([...new Array(16).fill({ nome: '', valor: '' }).map((i, ind) => ({ nome: `F${ind}`, valor: '' }))])
+        arrEstacaoReserva.setValue([...arrEstacaoReserva.value.map(er => {
+            er.A = undefined;
+            er.Ciclos = undefined;
+            er.ocupada = false;
+            er.operacao = undefined;
+            er.registradorSendoUtilizado = undefined;
+            er.Vj = undefined;
+            er.Vk = undefined;
+            er.destino = undefined;
+            er.Qj = undefined;
+            er.Qk = undefined;
+            er.idInstrucao = undefined;
+            return er;
+        })])
+        setCicloAtual(0);
+        arrBufferReordenamento.setValue([]);
         setConfirmado(true);
     }
 
@@ -69,6 +95,7 @@ const BotoesConfimarResetar: React.FC = () => {
         instrucaoDefault.executada = false;
         instrucaoDefault.escrita = false;
         arrInstrucoes.setValue([...[instrucaoDefault]]);
+        arrBufferReordenamento.setValue([]);
     }
 
     return (
@@ -77,7 +104,7 @@ const BotoesConfimarResetar: React.FC = () => {
                 <div>
                     <Button
                         style={{ marginRight: '10px' }}
-                        disabled={confirmado && cicloAtual > 0}
+                        // disabled={confirmado && cicloAtual > 0}
                         type={'primary'}
                         onClick={() => onCliqueConfirmar()}
                     >

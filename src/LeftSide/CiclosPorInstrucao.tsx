@@ -24,7 +24,6 @@ const CiclosPorInstrucao: React.FC<IProps> = () => {
                             {i}
                         </label>
                         <Input
-                            disabled={confirmado}
                             value={arrCicloPorInstrucao.findByStringId(i, 'TipoInstrucao').quantidade}
                             type="number"
                             onChange={(e) => {

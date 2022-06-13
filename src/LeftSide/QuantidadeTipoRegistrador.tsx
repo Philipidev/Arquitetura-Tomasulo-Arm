@@ -55,7 +55,6 @@ const QuantidadeTipoRegistrador: React.FC<IProps> = () => {
                             {i}
                         </label>
                         <Input
-                            disabled={confirmado}
                             value={arrTipoRegistrador.findByStringId(i, 'TipoRegistrador').quantidade}
                             type="number"
                             onChange={(e) => {

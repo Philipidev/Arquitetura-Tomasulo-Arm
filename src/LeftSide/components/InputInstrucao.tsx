@@ -33,21 +33,22 @@ const InputInstrucao: React.FC<IProps> = ({
         arrInstrucoes.setValue([...newArray]);
     }
 
-    function uuid(mask = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
-        return `${mask}`.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
+    // function uuid(mask = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx') {
+    //     return `${mask}`.replace(/[xy]/g, function (c) {
+    //         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    //         return v.toString(16);
+    //     });
+    // }
 
     const onMount = () => {
         if (index >= arrInstrucoes.length)
             arrInstrucoes.push({
-                id: uuid(),
+                id: (index+1)+"",
                 nome: 'Add',
                 enviada: false,
                 executada: false,
                 escrita: false,
+                commited: false,
                 entrada1: '',
                 entrada2: '',
                 entrada3: '',
@@ -68,7 +69,6 @@ const InputInstrucao: React.FC<IProps> = ({
                 Instr{index + 1}
             </label>
             <Select
-                disabled={confirmado}
                 style={{ width: '75px', marginRight: '2px' }}
                 value={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
                 defaultValue={arrInstrucoes.value[index]?.nome ?? TipoInstrucao.Add}
