@@ -28,7 +28,7 @@ Url: https://arquitetura-tomasulo-arm.azurewebsites.net/
 git clone https://github.com/Philipidev/Simulador-Tomasulo-React.git
 ```
 ```
-cd .\Arquitetura-Tomasulo-Arm\
+cd .\Simulador-Tomasulo-React\
 ```
 ```
 npm install
