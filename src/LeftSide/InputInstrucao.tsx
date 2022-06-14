@@ -1,8 +1,8 @@
 import { Input, Select } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { IntrucaoContext } from '../../App';
-import { TipoInstrucao } from '../../Enums/TipoInstrucao';
+import { IntrucaoContext } from '../App';
+import { TipoInstrucao } from '../Enums/TipoInstrucao';
 
 interface IProps {
     index: number;
@@ -43,7 +43,7 @@ const InputInstrucao: React.FC<IProps> = ({
     const onMount = () => {
         if (index >= arrInstrucoes.length)
             arrInstrucoes.push({
-                id: (index+1)+"",
+                id: (index + 1) + "",
                 nome: 'Add',
                 enviada: false,
                 executada: false,
@@ -52,10 +52,8 @@ const InputInstrucao: React.FC<IProps> = ({
                 entrada1: '',
                 entrada2: '',
                 entrada3: '',
+                descartada: false,
             });
-        else {
-            throw new Error('Index inválido, tem algo errado aí! (InputInstrucao.OnMount)');
-        }
         return () => {
             arrInstrucoes.removeIndex(index);
         }
@@ -64,7 +62,9 @@ const InputInstrucao: React.FC<IProps> = ({
     useEffect(onMount, []);
 
     return (
-        <Wrapper>
+        <Wrapper
+        //descartada={arrInstrucoes.value[index]?.descartada}
+        >
             <label style={{ marginRight: '12px' }}>
                 Instr{index + 1}
             </label>
@@ -114,6 +114,8 @@ const InputInstrucao: React.FC<IProps> = ({
 
 export default InputInstrucao;
 
+// const Wrapper = styled.div<{ descartada: boolean }>`
+/* ${props => props.descartada && `background: #b1000092;`} */
 const Wrapper = styled.div`
 	display: flex;
 	flex-direction: row;
@@ -121,6 +123,9 @@ const Wrapper = styled.div`
 	justify-content: center;
     margin: 2px;
     width: 100%;
+    padding: 2px;
+  
+
     input{
         width: 100px;
         margin-right: 2px;

@@ -3,4 +3,5 @@ export const TipoRegistrador = {
     Load: 'Load',
     Inteiro: 'Inteiro',
     Flutuante: 'Flutuante',
+    Jump: 'Jump',
 }

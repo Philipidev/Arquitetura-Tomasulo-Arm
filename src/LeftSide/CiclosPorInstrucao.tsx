@@ -14,7 +14,7 @@ const CiclosPorInstrucao: React.FC<IProps> = () => {
     } = useContext(IntrucaoContext);
 
     return (
-        <Wrapper 
+        <Wrapper
             title='Ciclos por instrução'
         >
             {
@@ -26,6 +26,7 @@ const CiclosPorInstrucao: React.FC<IProps> = () => {
                         <Input
                             value={arrCicloPorInstrucao.findByStringId(i, 'TipoInstrucao').quantidade}
                             type="number"
+                            disabled={i === "B"}
                             onChange={(e) => {
                                 if (Number(e.target.value) <= 0) return;
                                 arrCicloPorInstrucao.setValue(

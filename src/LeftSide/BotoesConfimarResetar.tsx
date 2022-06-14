@@ -16,9 +16,8 @@ const BotoesConfimarResetar: React.FC = () => {
         arrRegistrador,
         setQuantidadeInstrucoes,
         arrEstacaoReserva,
-        confirmado, setConfirmado,
+        setConfirmado,
         setCicloAtual,
-        cicloAtual,
         arrBufferReordenamento,
     } = useContext(IntrucaoContext);
 
@@ -33,7 +32,6 @@ const BotoesConfimarResetar: React.FC = () => {
                 ehValido = false;
                 alert(`'Instrução ${ind + 1}' ${i.nome} deve ter 3 entradas (entrada1 e entrada2 e entrada3)`);
             }
-            //TODO mais validacoes
         })
         if (!ehValido)
             return;
@@ -68,7 +66,8 @@ const BotoesConfimarResetar: React.FC = () => {
     const onCliqueResetar = () => {
         setConfirmado(false);
         setCicloAtual(0);
-        setQuantidadeInstrucoes(1);
+        arrInstrucoes.setValue([]);
+        setQuantidadeInstrucoes(0);
         arrRegistrador.setValue([...new Array(16).fill({ nome: '', valor: '' }).map((i, ind) => ({ nome: `F${ind}`, valor: '' }))])
         arrTipoRegistrador.setValue(Object.keys(TipoRegistrador).map((i: any, ind: number) => {
             return (
@@ -86,15 +85,7 @@ const BotoesConfimarResetar: React.FC = () => {
                 }
             )
         }))
-        const instrucaoDefault = arrInstrucoes.value[0];
-        instrucaoDefault.nome = 'Add';
-        instrucaoDefault.entrada1 = '';
-        instrucaoDefault.entrada2 = '';
-        instrucaoDefault.entrada3 = undefined;
-        instrucaoDefault.enviada = false;
-        instrucaoDefault.executada = false;
-        instrucaoDefault.escrita = false;
-        arrInstrucoes.setValue([...[instrucaoDefault]]);
+        setQuantidadeInstrucoes(1);
         arrBufferReordenamento.setValue([]);
     }
 

@@ -1,8 +1,10 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { Button, message, Tag } from 'antd';
+import { time } from 'console';
+import { randomInt } from 'crypto';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { IBufferReordenamento, IEstacaoReserva, IInstrucoes, IntrucaoContext, IRegistrador } from '../App';
+import { IEstacaoReserva, IInstrucoes, IntrucaoContext, IRegistrador } from '../App';
 import { TipoRegistrador } from '../Enums/TipoRegistrador';
 
 
@@ -22,23 +24,32 @@ const AvancarInstrucoes: React.FC = () => {
 
     const avancarInstrucoes = () => {
         const instrucaoAtual = arrInstrucoesConfirmadas.current.shift();
-        //TODO: se nao houver mais instrucoes nao procurar estacao reserva e sim executar os ciclos das estacoes
-        //se nao houver mais instrucoes e nao houver estacao reserva ocupada, então acabou todo o ciclo
         let estacaoReservaVazia: IEstacaoReserva | undefined = undefined;
-        console.log('arrEstacaoReserva', arrEstacaoReserva.value);
-        console.log('arrInstrucoes', arrInstrucoes.value);
-        console.log('arrInstrucoesConfirmadas.current', arrInstrucoesConfirmadas.current);
-        console.log('instrucaoAtual', instrucaoAtual);
 
-        if (!instrucaoAtual && arrInstrucoes.value.every(i => i.escrita === true) && arrEstacaoReserva.value.every(e => e.ocupada === false)) {
-            alert("Fim do ciclo!");
+        if (!instrucaoAtual && arrInstrucoes.value.every(i => i.commited === true || i.descartada === true) && arrEstacaoReserva.value.every(e => e.ocupada === false)) {
+            message.success("Fim do ciclo!", 5);
             return;
         }
         const arrBufferAux = arrBufferReordenamento.value;
         setCicloAtual(cicloAtual + 1);
         const arrRegParaAtualizar: IRegistrador[] = [];
+        const arrInstrucoesParaDescartar: string[] = [];
         const arrAuxER = arrEstacaoReserva.value.sort((a, b) => (a.Ciclos ?? 0) - (b.Ciclos ?? 0)).map(er => {
-            if (er.ocupada) {
+            const aux = arrInstrucoes.value.find(i => i.id === er.idInstrucao)
+            if (aux && aux.descartada) {
+                er.ocupada = false;
+                er.operacao = undefined;
+                er.Ciclos = undefined;
+                er.A = undefined;
+                er.Vj = undefined;
+                er.Vk = undefined;
+                er.Qj = undefined;
+                er.Qk = undefined;
+                er.destino = undefined;
+                er.idInstrucao = undefined;
+                er.registradorSendoUtilizado = undefined;
+            }
+            else if (er.ocupada) {
                 const indiceInstrucaoNoBuffer = arrBufferAux.findIndex(b => b.idInstrucao === er.idInstrucao);
                 let canCommit = true;
                 arrBufferAux.forEach((b, ind) => {
@@ -49,8 +60,19 @@ const AvancarInstrucoes: React.FC = () => {
                         }
                     }
                 });
-
-                if (er.Ciclos === 1
+                if (er.TipoRegistrador === 'Jump' && er.Ciclos !== 0) {
+                    const inst = arrInstrucoes.value.find(i => i.id === er.idInstrucao);
+                    if (inst) {
+                        const indexInst = arrInstrucoesConfirmadas.current.findIndex(e => e.id === inst.id);
+                        const timestamp = Math.round(new Date().getTime() / 1000);
+                        if (timestamp % 2 === Number(inst.entrada2)) {
+                            arrInstrucoes.value.slice(indexInst - 1).forEach(i => arrInstrucoesParaDescartar.push(i.id));
+                            message.info("Instruções descartadas, valor do Jump confirmado.", 3);
+                        }
+                    }
+                    er.Ciclos = 0;
+                }
+                else if (er.Ciclos === 1
                     && (er.Vj && er.Vk)
                     && er.TipoRegistrador !== TipoRegistrador.Load
                     && er.TipoRegistrador !== TipoRegistrador.Store
@@ -66,7 +88,7 @@ const AvancarInstrucoes: React.FC = () => {
                         er.destino?.startsWith('F') ?
                             er.destino :
                             arrInstrucoes.value.find(i => i.id === arrBufferAux[Number(er.destino) - 1].idInstrucao)!.entrada1;
-                    const registradorValor = er.destino!;//`${er.nome}_${er.A!}`;
+                    const registradorValor = er.destino!;
                     er.ocupada = false;
                     er.operacao = undefined;
                     er.Ciclos = undefined;
@@ -79,7 +101,7 @@ const AvancarInstrucoes: React.FC = () => {
                     er.idInstrucao = undefined;
                     er.registradorSendoUtilizado = undefined;
 
-                    if (er.TipoRegistrador !== TipoRegistrador.Store) {
+                    if (er.TipoRegistrador !== TipoRegistrador.Store && er.TipoRegistrador !== TipoRegistrador.Jump) {
                         const regToEdit = arrRegistrador.findByStringId(registradorNome, "nome");
                         regToEdit.valor = registradorValor;
                         arrRegParaAtualizar.push(regToEdit);
@@ -90,7 +112,6 @@ const AvancarInstrucoes: React.FC = () => {
                         if (instrucaoAtual?.id !== er.idInstrucao) {
                             //@ts-expect-error
                             er.Ciclos = er.Ciclos - 1;
-                            console.log('diminuiu nesse ciclo pra instrucao' + instrucaoAtual?.id)
                         }
                     }
                     else {
@@ -114,7 +135,8 @@ const AvancarInstrucoes: React.FC = () => {
             }
             return er;
         })
-        if (instrucaoAtual !== undefined && arrBufferReordenamento.length < tamnhoBuffer) {
+        const aux = arrInstrucoes.value.some(i => i.id === instrucaoAtual?.id && i.descartada)
+        if (instrucaoAtual !== undefined && !aux && arrBufferReordenamento.length < tamnhoBuffer) {
             if (!arrBufferAux.find(b => b.idInstrucao === instrucaoAtual.id))
                 arrBufferAux.push({
                     idInstrucao: instrucaoAtual.id,
@@ -122,7 +144,7 @@ const AvancarInstrucoes: React.FC = () => {
             if (instrucaoAtual.nome === 'Add' || instrucaoAtual.nome === "Sub") {
                 estacaoReservaVazia = arrEstacaoReserva.value.find(er => er.TipoRegistrador === TipoRegistrador.Inteiro && !er.ocupada);
             }
-            else if (instrucaoAtual.nome === 'Mul') {
+            else if (instrucaoAtual.nome === 'Mul' || instrucaoAtual.nome === 'Div') {
                 estacaoReservaVazia = arrEstacaoReserva.value.find(er => er.TipoRegistrador === TipoRegistrador.Flutuante && !er.ocupada);
             }
             else if (instrucaoAtual.nome === 'Ldr') {
@@ -132,77 +154,35 @@ const AvancarInstrucoes: React.FC = () => {
                 estacaoReservaVazia = arrEstacaoReserva.value.find(er => er.TipoRegistrador === TipoRegistrador.Store && !er.ocupada);
             }
             else if (instrucaoAtual.nome === 'B') {
-                //TODO: implementar
-                // estacaoReservaVazia = arrEstacaoReserva.value.find(er => er.TipoRegistrador === TipoRegistrador.Jump && !er.ocupada);
+                estacaoReservaVazia = arrEstacaoReserva.value.find(er => er.TipoRegistrador === TipoRegistrador.Jump && !er.ocupada);
             }
 
             if (estacaoReservaVazia !== undefined) {
-                if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Load) {
-                    estacaoReservaVazia.ocupada = true;
-                    estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
-                    estacaoReservaVazia.operacao = instrucaoAtual.nome;
-                    estacaoReservaVazia.Ciclos = arrCicloPorInstrucao.value.find(cpi => cpi.TipoInstrucao.toUpperCase() === instrucaoAtual.nome.toLocaleUpperCase())?.quantidade;
-                    estacaoReservaVazia.A = `${instrucaoAtual.entrada2} + (${instrucaoAtual.entrada3})`;
-                    const destinoIndex = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada1);
-                    estacaoReservaVazia.destino = destinoIndex !== -1 ? (destinoIndex + 1).toString() : instrucaoAtual.entrada1;
+                estacaoReservaVazia.ocupada = true;
+                estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
+                estacaoReservaVazia.operacao = instrucaoAtual.nome;
+                estacaoReservaVazia.Ciclos = arrCicloPorInstrucao.value.find(cpi => cpi.TipoInstrucao.toUpperCase() === instrucaoAtual.nome.toLocaleUpperCase())?.quantidade;
+                const destinoIndex = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada1);
+                estacaoReservaVazia.destino = destinoIndex !== -1 ? (destinoIndex + 1).toString() : instrucaoAtual.entrada1;
+                if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Load || estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Store || estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Jump) {
+                    estacaoReservaVazia.A = `${instrucaoAtual.entrada2}${instrucaoAtual.entrada3 ? " + (" + instrucaoAtual.entrada3 + ")" : ""}`;
                     estacaoReservaVazia.registradorSendoUtilizado = instrucaoAtual.entrada3;
                 }
-                else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Store) {
-                    estacaoReservaVazia.ocupada = true;
-                    estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
-                    estacaoReservaVazia.operacao = instrucaoAtual.nome;
-                    estacaoReservaVazia.Ciclos = arrCicloPorInstrucao.value.find(cpi => cpi.TipoInstrucao.toUpperCase() === instrucaoAtual.nome.toLocaleUpperCase())?.quantidade;
-                    estacaoReservaVazia.A = `${instrucaoAtual.entrada2} + (${instrucaoAtual.entrada3})`;
-                    const destinoIndex = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada1);
-                    estacaoReservaVazia.destino = destinoIndex !== -1 ? (destinoIndex + 1).toString() : instrucaoAtual.entrada1;
-                    estacaoReservaVazia.registradorSendoUtilizado = instrucaoAtual.entrada3;
-                }
-                else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Inteiro) {
-                    estacaoReservaVazia.ocupada = true;
-                    estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
-                    estacaoReservaVazia.operacao = instrucaoAtual.nome;
-                    estacaoReservaVazia.Ciclos = arrCicloPorInstrucao.value.find(cpi => cpi.TipoInstrucao.toUpperCase() === instrucaoAtual.nome.toLocaleUpperCase())?.quantidade;
-                    const destinoIndex = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada1);
-                    estacaoReservaVazia.destino = destinoIndex !== -1 ? (destinoIndex + 1).toString() : instrucaoAtual.entrada1;
+                else if (estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Inteiro || estacaoReservaVazia.TipoRegistrador === TipoRegistrador.Flutuante) {
                     const estacaoPendenteEnt2 = arrEstacaoReserva.value.find(er => er.ocupada && (er.destino === (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada2) + 1).toString() || er.destino === instrucaoAtual.entrada2));
                     const estacaoPendenteEnt3 = arrEstacaoReserva.value.find(er => er.ocupada && (er.destino === (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada3) + 1).toString() || er.destino === instrucaoAtual.entrada3));
-                    console.log('estacaoPendenteEnt3', estacaoPendenteEnt3)
-                    if (estacaoPendenteEnt2) {
-                        estacaoReservaVazia.Qj = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt2.idInstrucao) + 1).toString() //`${estacaoPendenteEnt2.nome}_${estacaoPendenteEnt2.destino}`;
+                    if (estacaoPendenteEnt2 && !arrInstrucoes.value.find(i => i.id === estacaoPendenteEnt2.idInstrucao)?.escrita) {
+                        estacaoReservaVazia.Qj = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt2.idInstrucao) + 1).toString()
                     }
                     else {
-                        estacaoReservaVazia.Vj = (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada2)).toString() //instrucaoAtual.entrada2
+                        estacaoReservaVazia.Vj = (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada2)).toString()
                         estacaoReservaVazia.Vj = estacaoReservaVazia.Vj === '-1' ? instrucaoAtual.entrada2 : estacaoReservaVazia.Vj + 1;
                     }
-                    if (estacaoPendenteEnt3) {
-                        estacaoReservaVazia.Qk = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt3.idInstrucao) + 1).toString() //`${estacaoPendenteEnt3.nome}_${estacaoPendenteEnt3.destino}`;
+                    if (estacaoPendenteEnt3 && !arrInstrucoes.value.find(i => i.id === estacaoPendenteEnt3.idInstrucao)?.escrita) {
+                        estacaoReservaVazia.Qk = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt3.idInstrucao) + 1).toString()
                     }
                     else {
-                        estacaoReservaVazia.Vk = (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada3)).toString() //instrucaoAtual.entrada2
-                        estacaoReservaVazia.Vk = estacaoReservaVazia.Vk === '-1' ? instrucaoAtual.entrada3 : estacaoReservaVazia.Vk + 1;
-                    }
-                }
-                else {
-                    estacaoReservaVazia.ocupada = true;
-                    estacaoReservaVazia.idInstrucao = instrucaoAtual.id;
-                    estacaoReservaVazia.operacao = instrucaoAtual.nome;
-                    estacaoReservaVazia.Ciclos = arrCicloPorInstrucao.value.find(cpi => cpi.TipoInstrucao.toUpperCase() === instrucaoAtual.nome.toLocaleUpperCase())?.quantidade;
-                    const destinoIndex = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada1);
-                    estacaoReservaVazia.destino = destinoIndex !== -1 ? (destinoIndex + 1).toString() : instrucaoAtual.entrada1;
-                    const estacaoPendenteEnt2 = arrEstacaoReserva.value.find(er => er.ocupada && (er.destino === (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada2) + 1).toString() || er.destino === instrucaoAtual.entrada2));
-                    const estacaoPendenteEnt3 = arrEstacaoReserva.value.find(er => er.ocupada && (er.destino === (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada3) + 1).toString() || er.destino === instrucaoAtual.entrada3));
-                    if (estacaoPendenteEnt2) {
-                        estacaoReservaVazia.Qj = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt2.idInstrucao) + 1).toString() //`${estacaoPendenteEnt2.nome}_${estacaoPendenteEnt2.destino}`;
-                    }
-                    else {
-                        estacaoReservaVazia.Vj = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada2).toString() //instrucaoAtual.entrada2
-                        estacaoReservaVazia.Vj = estacaoReservaVazia.Vj === '-1' ? instrucaoAtual.entrada2 : estacaoReservaVazia.Vj + 1;
-                    }
-                    if (estacaoPendenteEnt3) {
-                        estacaoReservaVazia.Qk = (arrBufferAux.findIndex(b => b.idInstrucao === estacaoPendenteEnt3.idInstrucao) + 1).toString() //`${estacaoPendenteEnt3.nome}_${estacaoPendenteEnt3.destino}`;
-                    }
-                    else {
-                        estacaoReservaVazia.Vk = arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada3).toString() //instrucaoAtual.entrada2
+                        estacaoReservaVazia.Vk = (arrBufferAux.findIndex(b => b.idInstrucao === instrucaoAtual.entrada3)).toString()
                         estacaoReservaVazia.Vk = estacaoReservaVazia.Vk === '-1' ? instrucaoAtual.entrada3 : estacaoReservaVazia.Vk + 1;
                     }
                 }
@@ -212,11 +192,17 @@ const AvancarInstrucoes: React.FC = () => {
             }
         }
 
-
-
+        arrInstrucoesConfirmadas.current = arrInstrucoesConfirmadas.current.filter(i => !arrInstrucoesParaDescartar.includes(i.id))
         arrInstrucoes.setValue([...arrInstrucoes.value.map(i => {
             const instER = arrAuxER.find(e => e.idInstrucao === i.id);
-            console.log('instER', instER)
+            if (arrInstrucoesParaDescartar.includes(i.id)) {
+                i.descartada = true;
+                i.commited = false;
+                i.enviada = false;
+                i.executada = false;
+                i.escrita = false;
+                return i;
+            }
             if (!i.enviada && arrBufferAux.find(b => b.idInstrucao === i.id)) {
                 i.enviada = true;
             }
@@ -242,17 +228,15 @@ const AvancarInstrucoes: React.FC = () => {
             }
             return r;
         })])
-        arrBufferReordenamento.setValue([...arrBufferAux]);
+        arrBufferReordenamento.setValue([...arrBufferAux.filter(b => !arrInstrucoesParaDescartar.includes(b.idInstrucao))]);
         arrEstacaoReserva.setValue([...arrAuxER]);
     }
 
     const onStart = () => {
         if (cicloAtual === 0 && confirmado) {
-            console.log('oi')
             arrInstrucoesConfirmadas.current = [...arrInstrucoes.value];
         }
         else if (!confirmado) {
-            console.log('oi2')
             arrInstrucoesConfirmadas.current = [];
         }
     }

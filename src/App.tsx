@@ -19,6 +19,7 @@ export interface IInstrucoes {
 	entrada1: string;
 	entrada2: string;
 	entrada3?: string;
+	descartada: boolean;
 }
 
 export interface IEstacaoReserva {
@@ -76,7 +77,7 @@ export interface IIntrucaoContextProps {
 export const IntrucaoContext = React.createContext<IIntrucaoContextProps>({} as IIntrucaoContextProps);
 
 function App() {
-	const tamnhoBuffer = 6;
+	const tamnhoBuffer = 50;
 	const [cicloAtual, setCicloAtual] = React.useState(0);
 	const [quantidadeInstrucoes, setQuantidadeInstrucoes] = useState<number>(1);
 	const [confirmado, setConfirmado] = useState<boolean>(false);
@@ -87,7 +88,7 @@ function App() {
 	const arrCicloPorInstrucao = useArray<ICicloPorInstrucao>(Object.keys(TipoInstrucao).map((i: any, ind: number) => {
 		return (
 			{
-				quantidade: 1,
+				quantidade: 2,
 				TipoInstrucao: i
 			}
 		)

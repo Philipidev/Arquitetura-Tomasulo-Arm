@@ -2,7 +2,6 @@ import { Card } from 'antd';
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { IInstrucoes, IntrucaoContext } from '../App';
-import InputInstrucao from '../LeftSide/components/InputInstrucao';
 
 
 const TabelaReordenamento: React.FC = () => {
@@ -12,6 +11,8 @@ const TabelaReordenamento: React.FC = () => {
     } = useContext(IntrucaoContext);
 
     const getEstadoInstrucao = (intrucao: IInstrucoes) => {
+        if (intrucao.descartada)
+            return 'Descartada';
         if (intrucao.commited)
             return "Commit";
         if (intrucao.escrita)
@@ -25,7 +26,7 @@ const TabelaReordenamento: React.FC = () => {
 
     return (
         <Wrapper
-            title='Instruções'
+            title={'Buffer de Reordenamento'}
             bodyStyle={{ overflowY: 'scroll' }}
         >
             <STabela>
@@ -41,45 +42,28 @@ const TabelaReordenamento: React.FC = () => {
                 </thead>
                 <tbody>
                     {
-                        (arrBufferReordenamento && arrBufferReordenamento.value && arrBufferReordenamento.value.length)
-                            ? arrBufferReordenamento.value.map((bufferRe, ind) => {
-                                const instrucao = arrInstrucoes.value.find(instrucao => instrucao.id === bufferRe.idInstrucao);
-                                if (!instrucao) return (
-                                    <tr>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        <td>--</td>
-                                        {/* <td>--</td> */}
-                                    </tr>)
-                                return (
-                                    <tr>
-                                        <td>{ind+1}</td>
-                                        <td>{!instrucao.commited ? 'X' : ''}</td>
-                                        <td>
-                                            {
-                                                instrucao.nome +
-                                                (!!instrucao.entrada1 ? ", " + instrucao.entrada1.toUpperCase() : '') +
-                                                (!!instrucao.entrada2 ? ", " + instrucao.entrada2.toUpperCase() : '') +
-                                                (!!instrucao.entrada3 ? ", " + instrucao.entrada3?.toUpperCase() : '')
-                                            }
-                                        </td>
-                                        <td>{getEstadoInstrucao(instrucao)}</td>
-                                        <td>{instrucao.entrada1}</td>
-                                        {/* <td>TODO</td> */}
-                                    </tr>)
-                            }
-                            )
-                            :
-                            <tr>
-                                <td>--</td>
-                                <td>--</td>
-                                <td>--</td>
-                                <td>--</td>
-                                <td>--</td>
-                                {/* <td>--</td> */}
-                            </tr>
+                        (arrInstrucoes && arrInstrucoes.value && arrInstrucoes.value.length)
+                        && arrInstrucoes.value.map((instrucao, ind) => {
+                            const buffer = arrBufferReordenamento.value.find(b => b.idInstrucao === instrucao.id);
+
+                            return (
+                                <tr style={{ backgroundColor: instrucao.descartada ? '#b6090990' : 'white' }}>
+                                    <td>{ind + 1}</td>
+                                    <td>{!instrucao.commited && !instrucao.descartada ? 'X' : ''}</td>
+                                    <td>
+                                        {
+                                            instrucao.nome +
+                                            (!!instrucao.entrada1 ? ", " + instrucao.entrada1.toUpperCase() : '') +
+                                            (!!instrucao.entrada2 ? ", " + instrucao.entrada2.toUpperCase() : '') +
+                                            (!!instrucao.entrada3 ? ", " + instrucao.entrada3?.toUpperCase() : '')
+                                        }
+                                    </td>
+                                    <td>{!buffer && !instrucao.descartada ? '' : getEstadoInstrucao(instrucao)}</td>
+                                    <td>{instrucao.entrada1}</td>
+                                    {/* <td>TODO</td> */}
+                                </tr>)
+                        }
+                        )
                     }
                 </tbody>
             </STabela>
