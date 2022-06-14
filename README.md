@@ -25,7 +25,7 @@ Url: https://arquitetura-tomasulo-arm.azurewebsites.net/
 
 ### Passo a Passo
 ```
-git clone https://github.com/Philipidev/Arquitetura-Tomasulo-Arm.git
+git clone https://github.com/Philipidev/Simulador-Tomasulo-React.git
 ```
 ```
 cd .\Arquitetura-Tomasulo-Arm\
