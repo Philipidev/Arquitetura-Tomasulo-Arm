@@ -1,7 +1,5 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button, message, Tag } from 'antd';
-import { time } from 'console';
-import { randomInt } from 'crypto';
 import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { IEstacaoReserva, IInstrucoes, IntrucaoContext, IRegistrador } from '../App';

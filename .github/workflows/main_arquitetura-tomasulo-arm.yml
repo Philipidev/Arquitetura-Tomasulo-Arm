@@ -30,8 +30,8 @@ jobs:
           CI: false
 
       - name: Zip artifact for deployment
-        run: cd ./build/; zip release.zip . -r
-
+        run: zip release.zip ./build/static/* ./build/asset-manifest.json ./build/index.html
+        
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
